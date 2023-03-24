@@ -1,13 +1,16 @@
-console.log('ff');
-
 document.addEventListener('DOMContentLoaded', function () {
   const chart = Highcharts.chart('graph-container-01', {
     title: {
-      text: 'Solar Employment Growth by Sector, 2010-2016',
+      text: '진주시 단독다가구 전월세 물량 예측 (2023년 하반기)',
     },
 
     subtitle: {
-      text: 'Source: thesolarfoundation.com',
+      text: '자료: 국토교통부 단독/다가구 전월세 자료',
+    },
+
+    chart: {
+      renderTo: 'container',
+      type: 'column',
     },
 
     yAxis: {

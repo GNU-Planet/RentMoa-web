@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DetachedHouseRent } from './entity/app.entity';
 import { join } from 'path';
 
 @Module({
@@ -23,10 +24,11 @@ import { join } from 'path';
         password: config.get('DB_PASSWORD'),
         database: 'richJinju',
         entities: ['dist/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([DetachedHouseRent]),
   ],
   controllers: [AppController],
   providers: [AppService],

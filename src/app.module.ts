@@ -25,6 +25,7 @@ import { join } from 'path';
         database: 'richJinju',
         entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: false,
+        autoLoadEntities: true,
       }),
       inject: [ConfigService],
     }),

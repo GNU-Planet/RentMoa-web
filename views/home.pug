@@ -1,11 +1,4 @@
-doctype html
-html(lang='en')
-  head
-    title Pug
-    link(rel='stylesheet', href='client/style.css')
-    script(src="https://cdn.jsdelivr.net/npm/highcharts@10.3.3/highcharts.min.js")
-    link(href="https://cdn.jsdelivr.net/npm/highcharts@10.3.3/css/highcharts.min.css", rel="stylesheet")
-  body
-    h1 `23 하반기(7월~12월) 진주시 임차물량 예측정보
-    <div id="graph-container-01" style="width:100%; height:400px;"></div>
-    script(src="client/highcharts.js")
+extends layouts/base
+
+block content
+  a(href="/type-area") 주택유형별 면적별 예측물량

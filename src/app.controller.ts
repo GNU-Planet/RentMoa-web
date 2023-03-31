@@ -9,7 +9,13 @@ export class AppController {
 
   @Get()
   @Render('home')
-  async getAllHouses(): Promise<{
+  getHome() {
+    return;
+  }
+
+  @Get('/type-area')
+  @Render('type_area')
+  async getPredictedAmountByArea(): Promise<{
     result: { [key: string]: { [key: string]: number } };
   }> {
     const result = await this.appService.getPredictedAmountByArea();

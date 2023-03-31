@@ -1,5 +1,5 @@
 import { Controller, Get, Render } from '@nestjs/common';
-import { Body } from '@nestjs/common/decorators';
+import { Param, Query } from '@nestjs/common/decorators';
 import { AppService } from './app.service';
 import { DetachedHouseRent } from './entity/app.entity';
 
@@ -15,10 +15,14 @@ export class AppController {
 
   @Get('/type-area')
   @Render('type_area')
-  async getPredictedAmountByArea(): Promise<{
+  async getPredictedAmountByArea(@Query('location') location: string): Promise<{
+    region: string;
     result: { [key: string]: { [key: string]: number } };
   }> {
-    const result = await this.appService.getPredictedAmountByArea();
-    return { result };
+    if (!location) {
+      location = '진주시';
+    }
+    const result = await this.appService.getPredictedAmountByArea(location);
+    return { region: location, result };
   }
 }

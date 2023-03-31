@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
+import { Like, Not, Repository } from 'typeorm';
 import { DetachedHouseRent } from './entity/app.entity';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class AppService {
     return this.detachedHouseRentRepository.find();
   }
 
-  async getPredictedAmountByArea(): Promise<{
+  async getPredictedAmountByArea(location: string): Promise<{
     [key: string]: { [key: string]: number };
   }> {
     const result: { [key: string]: { [key: string]: number } } = {};
@@ -25,9 +25,16 @@ export class AppService {
     const labels = ['40㎡ 미만', '40-85㎡', '85㎡ 이상'];
 
     for (const 월 of months) {
-      const data = await this.detachedHouseRentRepository.find({
-        where: { 월 },
-      });
+      let data;
+      if (location == '진주시') {
+        data = await this.detachedHouseRentRepository.find({
+          where: { 월, 법정동: Not(Like('%읍')) },
+        });
+      } else {
+        data = await this.detachedHouseRentRepository.find({
+          where: { 월, 법정동: location },
+        });
+      }
 
       const 면적별_예측물량 = data.map(({ 계약면적 }) => 계약면적);
       const 면적별_예측물량_구간 = 면적별_예측물량.map((면적) => {

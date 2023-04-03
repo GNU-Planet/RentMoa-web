@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   const chart = Highcharts.chart('type_area-graph-container', {
     title: {
-      text: `${region} 단독 다가구 면적별 전월세 예측물량`,
+      text: `${region} 단독 다가구 면적별 ${charterRent} 예측물량`,
     },
 
     subtitle: {

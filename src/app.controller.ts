@@ -15,20 +15,48 @@ export class AppController {
 
   @Get('/type-area')
   @Render('type_area')
-  async getPredictedAmountByArea(@Query('location') location: string): Promise<{
+  async getPredictedAmountByArea(
+    @Query('location') location: string,
+    @Query('charterRent') charterRent: string,
+  ): Promise<{
     region: string;
+    charterRent: string;
     result: { [key: string]: { [key: string]: number } };
   }> {
     if (!location) {
       location = '진주시';
     }
-    const result = await this.appService.getPredictedAmountByArea(location);
-    return { region: location, result };
+    if (!charterRent) {
+      charterRent = '전월세';
+    }
+    const result = await this.appService.getPredictedAmountByArea(
+      location,
+      charterRent,
+    );
+    return { region: location, charterRent, result };
   }
 
   @Get('/dong')
   @Render('dong')
-  async getPredictedAmountByDong() {
-    return;
+  async getPredictedAmountByDong(
+    @Query('location') location: string,
+    @Query('charterRent') charterRent: string,
+  ): Promise<{
+    region: string;
+    charterRent: string;
+    result: { [key: string]: { [key: string]: number } };
+  }> {
+    if (!location) {
+      location = '진주시';
+    }
+    if (!charterRent) {
+      charterRent = '전월세';
+    }
+    const result = await this.appService.getPredictedAmountByDong(
+      location,
+      charterRent,
+    );
+    console.log(result);
+    return { region: location, charterRent, result };
   }
 }

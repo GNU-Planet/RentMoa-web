@@ -1,9 +1,9 @@
 /* 법정동별 예측물량 */
 
 document.addEventListener('DOMContentLoaded', function () {
-  const chart = Highcharts.chart('type_area-graph-container', {
+  const chart = Highcharts.chart('dong-graph-container', {
     title: {
-      text: `${region} 단독 다가구 면적별 전월세 예측물량`,
+      text: `${region} 법정동별 ${charterRent} 예측물량`,
     },
 
     subtitle: {
@@ -33,26 +33,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     series: [
       {
-        name: '40㎡ 미만',
-        data: Object.values(result).map((item) => item['40㎡ 미만'] || 0),
-        dataLabels: {
-          enabled: true,
-          format: '{y}',
-          inside: true,
-        },
-      },
-      {
-        name: '40-85㎡',
-        data: Object.values(result).map((item) => item['40-85㎡'] || 0),
-        dataLabels: {
-          enabled: true,
-          format: '{y}',
-          inside: true,
-        },
-      },
-      {
-        name: '85㎡ 이상',
-        data: Object.values(result).map((item) => item['85㎡ 이상'] || 0),
+        name: charterRent,
+        data: Object.values(result),
         dataLabels: {
           enabled: true,
           format: '{y}',

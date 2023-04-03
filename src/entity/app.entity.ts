@@ -15,6 +15,12 @@ export class DetachedHouseRent {
   월: number;
 
   @Column()
+  계약종료년: number;
+
+  @Column()
+  계약종료월: number;
+
+  @Column()
   건축년도: number;
 
   @Column()

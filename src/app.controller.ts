@@ -25,4 +25,10 @@ export class AppController {
     const result = await this.appService.getPredictedAmountByArea(location);
     return { region: location, result };
   }
+
+  @Get('/dong')
+  @Render('dong')
+  async getPredictedAmountByDong() {
+    return;
+  }
 }

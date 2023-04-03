@@ -24,15 +24,15 @@ export class AppService {
     const bins = [40, 85, 300];
     const labels = ['40㎡ 미만', '40-85㎡', '85㎡ 이상'];
 
-    for (const 월 of months) {
+    for (const 계약종료월 of months) {
       let data;
       if (location == '진주시') {
         data = await this.detachedHouseRentRepository.find({
-          where: { 월, 법정동: Not(Like('%읍')) },
+          where: { 계약종료년: 2023, 계약종료월, 법정동: Not(Like('%리')) },
         });
       } else {
         data = await this.detachedHouseRentRepository.find({
-          where: { 월, 법정동: location },
+          where: { 계약종료년: 2023, 계약종료월, 법정동: location },
         });
       }
 
@@ -47,7 +47,7 @@ export class AppService {
         valueCounts[label] = (valueCounts[label] || 0) + 1;
       });
 
-      result[월.toString()] = valueCounts;
+      result[계약종료월.toString()] = valueCounts;
     }
     return result;
   }

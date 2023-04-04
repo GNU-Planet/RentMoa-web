@@ -56,7 +56,6 @@ export class AppController {
       location,
       charterRent,
     );
-    console.log(result);
     return { region: location, charterRent, result };
   }
 }

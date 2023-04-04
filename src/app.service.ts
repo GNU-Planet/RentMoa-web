@@ -4,7 +4,7 @@ import { Like, Not, Repository, FindManyOptions, Equal } from 'typeorm';
 import { DetachedHouseRent } from './entity/app.entity';
 
 const year = 2023;
-const months = [6, 7, 8, 9, 10, 11, 12];
+const months = [7, 8, 9, 10, 11, 12];
 
 @Injectable()
 export class AppService {
@@ -38,9 +38,7 @@ export class AppService {
   async getPredictedAmountByDong(
     location: string,
     charterRent: string,
-  ): Promise<{
-    [key: string]: { [key: string]: number };
-  }> {
+  ): Promise<{ [key: string]: { [key: string]: number } }> {
     const result = {};
     for (const 계약종료월 of months) {
       const data = await this.getDetachedHouseRentData(
@@ -54,12 +52,17 @@ export class AppService {
         result[label] = (result[label] || 0) + 1;
       });
     }
-    const sortedResult = Object.entries(result)
+
+    const avgResult = Object.entries(result).reduce(
+      (acc, [key, value]) => ({ ...acc, [key]: Math.floor(Number(value) / 6) }),
+      {},
+    );
+
+    const sortedResult = Object.entries(avgResult)
+      .filter(([key, value]) => Number(value) >= 5)
       .sort(([, a], [, b]) => Number(b) - Number(a))
-      .reduce((acc, [key, value]) => {
-        acc[key] = value;
-        return acc;
-      }, {});
+      .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
     return sortedResult;
   }
 

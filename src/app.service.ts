@@ -98,4 +98,42 @@ export class AppService {
     }
     return result;
   }
+
+  async getPredictedAmountByBuiltYear(
+    location: string,
+    charterRent: string,
+  ): Promise<{
+    [key: string]: { [key: string]: number };
+  }> {
+    const result: { [key: string]: { [key: string]: number } } = {};
+    const bins = [10, 20, 30, 100];
+    const labels = ['10년 미만', '10-20년', '20-30년', '30년 이상'];
+
+    for (const 계약종료월 of months) {
+      const data = await this.getDetachedHouseRentData(
+        location,
+        계약종료월,
+        charterRent,
+      );
+
+      const 건축년도별_예측물량 = data
+        .map(({ 건축년도 }) => 건축년도)
+        .filter(Boolean);
+      const 건축년도별_예측물량_구간 = 건축년도별_예측물량.map((년도) => {
+        const binIndex = bins.findIndex(
+          (bin) => new Date().getFullYear() - Number(년도) < bin,
+        );
+        return labels[binIndex];
+      });
+      console.log(건축년도별_예측물량_구간);
+
+      const valueCounts = {};
+      건축년도별_예측물량_구간.forEach((label) => {
+        valueCounts[label] = (valueCounts[label] || 0) + 1;
+      });
+
+      result[계약종료월.toString()] = valueCounts;
+    }
+    return result;
+  }
 }

@@ -58,4 +58,27 @@ export class AppController {
     );
     return { region: location, charterRent, result };
   }
+
+  @Get('/built-year')
+  @Render('built_year')
+  async getPredictedAmountByBuiltYear(
+    @Query('location') location: string,
+    @Query('charterRent') charterRent: string,
+  ): Promise<{
+    region: string;
+    charterRent: string;
+    result: { [key: string]: { [key: string]: number } };
+  }> {
+    if (!location) {
+      location = '진주시';
+    }
+    if (!charterRent) {
+      charterRent = '전월세';
+    }
+    const result = await this.appService.getPredictedAmountByBuiltYear(
+      location,
+      charterRent,
+    );
+    return { region: location, charterRent, result };
+  }
 }

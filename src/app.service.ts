@@ -58,12 +58,7 @@ export class AppService {
       {},
     );
 
-    const sortedResult = Object.entries(avgResult)
-      .filter(([key, value]) => Number(value) >= 5)
-      .sort(([, a], [, b]) => Number(b) - Number(a))
-      .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
-
-    return sortedResult;
+    return avgResult;
   }
 
   async getPredictedAmountByArea(
@@ -125,7 +120,6 @@ export class AppService {
         );
         return labels[binIndex];
       });
-      console.log(건축년도별_예측물량_구간);
 
       const valueCounts = {};
       건축년도별_예측물량_구간.forEach((label) => {

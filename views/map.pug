@@ -1,0 +1,13 @@
+extends layouts/base
+
+block content
+  include ./partials/filter.pug
+  div(id="map")
+
+block scripts
+  script.
+    const result = !{JSON.stringify(result)};
+  script.
+    const API_KEY = !{JSON.stringify(API_KEY)};
+  script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${API_KEY}&libraries=services,clusterer,drawing`)
+  script(src="/client/js/map.js")

@@ -9,24 +9,77 @@ body {
 }
 
 #map {
+  position: relative;
   height: 100vh;
   width: 100vw;
 }
 
 .dong-box {
-  background-color: #166bac;
-  padding: 5px;
+  background-color: #5963d9;
+  padding: 7px 13px;
   text-align: center;
-  font-weight: bold;
   cursor: pointer;
+  font-size: 12px;
+  border-radius: 3px;
 }
 
 .dong-title {
   color: yellow;
-  font-size: 10px;
+  font-size: 0.9em;
 }
 
 .dong-count {
   color: white;
-  font-size: 13px;
+  font-size: 1.2em;
+}
+
+.no-count {
+  background-color: gray;
+}
+
+.no-count > .dong-title {
+  color: #dbdce8;
+}
+
+.side-container {
+  position: absolute;
+  z-index: 2;
+  margin: 20px;
+}
+/* 달 선택 */
+.filter-container {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03),
+    1px 1px 1px rgba(0, 0, 0, 0.03);
+  margin-bottom: 10px;
+}
+
+.filter-container > .title {
+  display: inline-block;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.filter-container > .filterBtns {
+  display: flex;
+  background-color: #f3f4fc;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.filter-container > .filterBtns > .filterBtn {
+  padding: 7px 15px;
+  border: 3px gray;
+  color: gray;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 15px;
+  border-radius: 10px;
+}
+
+#housingTypeBtn-4 {
+  background-color: white;
+  color: #5963d9;
 }

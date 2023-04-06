@@ -1,3 +1,12 @@
+const drawNoCount = () => {
+  const dongCounts = document.querySelectorAll('.dong-count');
+  dongCounts.forEach((count) => {
+    if (!count.textContent.trim()) {
+      count.closest('.dong-box').classList.add('no-count');
+    }
+  });
+};
+
 var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
 var options = {
   //지도를 생성할 때 필요한 기본 옵션
@@ -16,7 +25,7 @@ const geoJsonData = fetch('client/json/Jinju_dong_centerLocation.json')
 geoJsonData.then((data) => {
   const markers = data.map((location) => {
     const dong = result[location.dong];
-    const count = dong !== undefined && dong !== 0 ? dong + '호' : '-';
+    const count = dong !== undefined && dong !== 0 ? dong + '호' : '';
     const content = `<div class="dong-box">
                       <p class="dong-title">${location.dong}</p>
                       <p class="dong-count">${count}</p>
@@ -29,5 +38,11 @@ geoJsonData.then((data) => {
       xAnchor: 0.5,
       yAnchor: 1.0,
     });
+    drawNoCount();
   });
+});
+
+kakao.maps.event.addListener(map, 'dragend', function () {
+  // 스크롤 이동 시 실행할 코드 작성
+  drawNoCount();
 });

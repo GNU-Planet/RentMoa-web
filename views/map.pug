@@ -1,8 +1,10 @@
 extends layouts/base
 
 block content
-  include ./partials/filter.pug
-  div(id="map")
+  div.side-container
+    include ./partials/housingTypeFilter.pug
+    include ./partials/predictionMonthFilter.pug
+  div#map
 
 block scripts
   script.

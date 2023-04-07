@@ -1,5 +1,5 @@
-mixin filterBtn(id, text)
-  span(class='filterBtn', id=id)= text
+mixin filterBtn(id, text, selectedClass = '')
+  span(class=`filterBtn ${selectedClass}`, id=id)= text 
 
 div(class='filter-container')
   block filterTitle

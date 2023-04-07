@@ -1,6 +1,8 @@
 extends layouts/base
 
 block content
+  div.modal-container
+    include ./layouts/info.pug
   div.side-container
     include ./partials/housingTypeFilter.pug
     include ./partials/predictionMonthFilter.pug
@@ -13,3 +15,4 @@ block scripts
     const API_KEY = !{JSON.stringify(API_KEY)};
   script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${API_KEY}&libraries=services,clusterer,drawing`)
   script(src="/client/js/map.js")
+  script(src="/client/js/api.js")

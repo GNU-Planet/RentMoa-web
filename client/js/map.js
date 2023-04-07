@@ -1,3 +1,10 @@
+const addDongBtnClickEventListener = () => {
+  const dongBtns = document.querySelectorAll('.dong-box');
+  dongBtns.forEach((btn) => {
+    btn.addEventListener('click', getPredictionData);
+  });
+};
+
 const drawNoCount = () => {
   const dongCounts = document.querySelectorAll('.dong-count');
   dongCounts.forEach((count) => {
@@ -39,10 +46,12 @@ geoJsonData.then((data) => {
       yAnchor: 1.0,
     });
     drawNoCount();
+    addDongBtnClickEventListener();
   });
 });
 
 kakao.maps.event.addListener(map, 'dragend', function () {
   // 스크롤 이동 시 실행할 코드 작성
   drawNoCount();
+  addDongBtnClickEventListener();
 });

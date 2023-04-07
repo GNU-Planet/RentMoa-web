@@ -1,3 +1,4 @@
+/* 공통 */
 * {
   margin: 0;
   padding: 0;
@@ -8,6 +9,16 @@ body {
   background-color: #f2f2f2;
 }
 
+.selected {
+  background-color: white;
+  color: #5963d9 !important;
+}
+
+.except-content {
+  display: none;
+}
+
+/* 지도 */
 #map {
   position: relative;
   height: 100vh;
@@ -16,10 +27,10 @@ body {
 
 .dong-box {
   background-color: #5963d9;
-  padding: 7px 13px;
+  padding: 4px 10px;
   text-align: center;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 10px;
   border-radius: 3px;
 }
 
@@ -41,15 +52,17 @@ body {
   color: #dbdce8;
 }
 
+/* 사이드바 */
 .side-container {
   position: absolute;
   z-index: 2;
-  margin: 20px;
+  margin: 10px;
 }
-/* 달 선택 */
+
+/* 필터 */
 .filter-container {
   background-color: white;
-  padding: 20px;
+  padding: 15px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03),
     1px 1px 1px rgba(0, 0, 0, 0.03);
   margin-bottom: 10px;
@@ -57,7 +70,7 @@ body {
 
 .filter-container > .title {
   display: inline-block;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: bold;
   margin-bottom: 20px;
 }
@@ -65,21 +78,43 @@ body {
 .filter-container > .filterBtns {
   display: flex;
   background-color: #f3f4fc;
-  padding: 5px;
+  padding: 2px;
   border-radius: 10px;
 }
 
 .filter-container > .filterBtns > .filterBtn {
-  padding: 7px 15px;
+  padding: 7px 10px;
   border: 3px gray;
   color: gray;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 15px;
   border-radius: 10px;
 }
 
-#housingTypeBtn-4 {
+/* 정보창 */
+.modal-container {
+  position: absolute;
+  z-index: 3;
+}
+
+.info-container {
+  height: 100vh;
+  width: 300px;
   background-color: white;
-  color: #5963d9;
+  padding: 15px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03),
+    1px 1px 1px rgba(0, 0, 0, 0.03);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.info-container > .info-box {
+  border-bottom: gray 10px;
+}
+
+.info-container > .title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }

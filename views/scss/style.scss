@@ -1,0 +1,28 @@
+// 전역에서 공통으로 사용되는 스타일
+$primary-color: #5963d9;
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #fff;
+  color: #000;
+}
+
+.selected {
+  background-color: white;
+  color: #5963d9 !important;
+}
+
+.except-content {
+  display: none;
+}
+
+.center-content {
+  text-align: center;
+}
+
+// 다른 SCSS 파일을 import 하여 구조적으로 관리
+@import 'reset.scss';
+@import 'pages/map.scss';
+
+@import 'layouts/filter.scss';
+@import 'layouts/info.scss';

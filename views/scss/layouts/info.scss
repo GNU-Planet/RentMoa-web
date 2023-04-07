@@ -1,0 +1,32 @@
+.info-container {
+  height: 100vh;
+  width: 350px;
+  background-color: white;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03),
+    1px 1px 1px rgba(0, 0, 0, 0.03);
+
+  .info-box:first-of-type {
+    background-color: $primary-color;
+    color: white;
+    border-bottom: 3px solid #4e59cf;
+  }
+
+  .info-box {
+    border-bottom: 3px solid lightgray;
+    padding: 20px;
+    .header-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: lightgray;
+    }
+  }
+}

@@ -4,7 +4,7 @@ import { Like, Not, Repository, FindManyOptions, Equal } from 'typeorm';
 import { DetachedHouseRent } from './entity/app.entity';
 
 const year = 2023;
-const months = [7, 8, 9, 10, 11, 12];
+const month = [7, 8, 9, 10, 11, 12];
 
 @Injectable()
 export class AppService {
@@ -38,6 +38,7 @@ export class AppService {
   async getPredictedAmountByDong(
     location: string,
     charterRent: string,
+    months: Array<number>,
   ): Promise<{ [key: string]: { [key: string]: number } }> {
     const result = {};
     for (const 계약종료월 of months) {
@@ -71,7 +72,7 @@ export class AppService {
     const bins = [40, 85, 300];
     const labels = ['40㎡ 미만', '40-85㎡', '85㎡ 이상'];
 
-    for (const 계약종료월 of months) {
+    for (const 계약종료월 of month) {
       const data = await this.getDetachedHouseRentData(
         location,
         계약종료월,
@@ -104,7 +105,7 @@ export class AppService {
     const bins = [10, 20, 30, 100];
     const labels = ['10년 미만', '10-20년', '20-30년', '30년 이상'];
 
-    for (const 계약종료월 of months) {
+    for (const 계약종료월 of month) {
       const data = await this.getDetachedHouseRentData(
         location,
         계약종료월,

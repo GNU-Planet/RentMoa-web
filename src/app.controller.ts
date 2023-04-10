@@ -22,6 +22,7 @@ export class AppController {
     const result = await this.appService.getPredictedAmountByDong(
       '진주시',
       '전월세',
+      [7],
     );
     const API_KEY = this.configService.get('KAKAO_MAPS_API_KEY');
     return { API_KEY, result };
@@ -67,6 +68,7 @@ export class AppController {
     const result = await this.appService.getPredictedAmountByDong(
       location,
       charterRent,
+      [],
     );
     return { region: location, charterRent, result };
   }

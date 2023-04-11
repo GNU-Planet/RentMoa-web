@@ -81,11 +81,9 @@ const geoJsonData = fetch('client/json/Jinju_dong_centerLocation.json')
 
 geoJsonData.then((data) => {
   markers = data.map((location) => {
-    const dong = result[location.dong];
-    const count = dong !== undefined && dong !== 0 ? dong + '호' : '';
     const content = `<div class="dong-box">
                       <p class="dong-title">${location.dong}</p>
-                      <p class="dong-count">${count}</p>
+                      <p class="dong-count"></p>
                     </div>`;
     const position = new kakao.maps.LatLng(location.lat, location.lng);
     const customOverlay = new kakao.maps.CustomOverlay({
@@ -97,7 +95,7 @@ geoJsonData.then((data) => {
     });
     return customOverlay;
   });
-  drawNoCount();
+  updateMarkers(markers, result);
   addDongBtnClickEventListener();
 });
 

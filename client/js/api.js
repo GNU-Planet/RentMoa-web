@@ -30,20 +30,4 @@ const getPredictionData = (e) => {
   });
 
   drawPredictionData();
-
-  const xhr = new XMLHttpRequest();
-  const queryString = `location=${dongTitle}`;
-  xhr.open('GET', `/type-area?${queryString}`);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send();
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      if (xhr.status === 200) {
-        // 응답 처리 로직
-        console.log(xhr.responseText);
-      } else {
-        console.log('요청 실패');
-      }
-    }
-  };
 };

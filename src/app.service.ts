@@ -54,12 +54,7 @@ export class AppService {
       });
     }
 
-    const avgResult = Object.entries(result).reduce(
-      (acc, [key, value]) => ({ ...acc, [key]: Math.floor(Number(value) / 6) }),
-      {},
-    );
-
-    return avgResult;
+    return result;
   }
 
   async getPredictedAmountByArea(

@@ -25,7 +25,6 @@ export class AppController {
       [7],
     );
     const API_KEY = this.configService.get('KAKAO_MAPS_API_KEY');
-    console.log(result);
     return { API_KEY, result };
   }
 

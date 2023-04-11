@@ -22,6 +22,12 @@ const addPredictionMonthBtnClickEventListener = () => {
   );
   predictionMonthBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
+      // 기존의 selected 버튼 삭제
+      predictionMonthBtns.forEach((btn) => {
+        btn.classList.remove('selected');
+      });
+      // 클릭한 버튼에 selected 클래스 추가
+      btn.classList.add('selected');
       // 클릭한 버튼의 id에서 월 값을 추출하여 months 배열에 추가
       const month = btn.id.split('-')[1];
       const data = {

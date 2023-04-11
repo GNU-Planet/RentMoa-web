@@ -14,6 +14,7 @@ const updateMarkers = (markers, result) => {
     marker.setContent(newContent);
   });
   drawNoCount();
+  addDongBtnClickEventListener();
 };
 
 const addPredictionMonthBtnClickEventListener = () => {
@@ -102,7 +103,6 @@ geoJsonData.then((data) => {
     return customOverlay;
   });
   updateMarkers(markers, result);
-  addDongBtnClickEventListener();
 });
 
 addPredictionMonthBtnClickEventListener();

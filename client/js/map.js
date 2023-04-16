@@ -8,7 +8,7 @@ const updateMarkers = (markers, result) => {
     const dongTitleEl = dom.querySelector('.dong-title');
     const dongCountEl = dom.querySelector('.dong-count');
     const dong = result[dongTitleEl.innerText];
-    const count = dong !== undefined && dong !== 0 ? dong + '호' : '';
+    const count = dong !== undefined && dong.합계 !== 0 ? dong.합계 + '호' : '';
     dongCountEl.innerText = count;
     const newContent = dom.documentElement.innerHTML;
     marker.setContent(newContent);
@@ -44,8 +44,8 @@ const addPredictionMonthBtnClickEventListener = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 201) {
             // 응답 처리 로직
-            const result = JSON.parse(xhr.responseText);
-            updateMarkers(markers, result.result);
+            result = JSON.parse(xhr.responseText).result;
+            updateMarkers(markers, result);
           } else {
             console.log('요청 실패');
           }

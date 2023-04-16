@@ -37,20 +37,36 @@ export class AppService {
 
   async getPredictedAmountByDong(
     location: string,
-    charterRent: string,
     months: Array<number>,
-  ): Promise<{ [key: string]: { [key: string]: number } }> {
+  ): Promise<{ [key: string]: { 전세: number; 월세: number; 합계: number } }> {
     const result = {};
     for (const 계약종료월 of months) {
-      const data = await this.getDetachedHouseRentData(
+      const 전세데이터 = await this.getDetachedHouseRentData(
         location,
         계약종료월,
-        charterRent,
+        '전세', // 전세 데이터 가져오기
       );
-      const 법정동별_예측물량 = data.map(({ 법정동 }) => 법정동);
+      const 월세데이터 = await this.getDetachedHouseRentData(
+        location,
+        계약종료월,
+        '월세', // 월세 데이터 가져오기
+      );
 
-      법정동별_예측물량.forEach((label) => {
-        result[label] = (result[label] || 0) + 1;
+      // 각각의 데이터를 처리하여 result 객체에 추가
+      전세데이터.forEach(({ 법정동 }) => {
+        if (!result[법정동]) {
+          result[법정동] = { 전세: 0, 월세: 0, 합계: 0 };
+        }
+        result[법정동].전세 += 1;
+        result[법정동].합계 += 1;
+      });
+
+      월세데이터.forEach(({ 법정동 }) => {
+        if (!result[법정동]) {
+          result[법정동] = { 전세: 0, 월세: 0, 합계: 0 };
+        }
+        result[법정동].월세 += 1;
+        result[법정동].합계 += 1;
       });
     }
 

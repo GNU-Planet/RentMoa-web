@@ -2,7 +2,7 @@ const filterContainer = document.querySelectorAll('.filter-container');
 const infoContainer = document.querySelector('.info-container');
 const filterBtns = document.querySelectorAll('.filterBtn');
 
-const drawPredictionData = (dongTitle) => {
+const drawPredictionData = (dongTitle, builtYearData) => {
   const closeBtn = infoContainer.querySelector('.close_btn');
   infoContainer.classList.remove('except-content');
   // 기존 사이드 필터박스 삭제
@@ -28,31 +28,21 @@ const drawPredictionData = (dongTitle) => {
 
   // 전월세 요약 정보창 그리기
   const preInfo = document.querySelector('.pre-info');
-  const charterInfo = document.querySelector('.charter-info');
-  const rentInfo = document.querySelector('.rent-info');
-  const charRentSum = preInfo.querySelector('.text');
-  const charSum = charterInfo.querySelector('.text');
-  const rentSum = rentInfo.querySelector('.text');
-  charRentSum.innerHTML = `${result[dongTitle]?.합계 || 0}호`;
-  charSum.innerHTML = `${result[dongTitle]?.전세 || 0}호`;
-  rentSum.innerHTML = `${result[dongTitle]?.월세 || 0}호`;
-};
+  const preTypes = preInfo.querySelectorAll('.sub-info-box');
 
-const getPredictionData = (e) => {
-  const dongTitle =
-    e.target.parentNode.querySelector('.dong-title').textContent;
-  let selectedClass = null;
-
-  filterBtns.forEach((btn) => {
-    if (btn.classList.contains('selected')) {
-      selectedClass = btn.id.split('-')[0];
-    }
+  console.log(Object.values(result[dongTitle]));
+  preTypes.forEach((year, index) => {
+    const text = year.querySelector('.text');
+    const total = Object.values(result[dongTitle])[index] || 0;
+    text.textContent = `${total}호`;
   });
 
-  // 필터 컨테이너 삭제
-  filterContainer.forEach((container) => {
-    container.classList.add('except-content');
+  // 건축연한별 예측물량 그리기
+  const builtYearInfo = document.querySelector('.built-year-info');
+  const builtYears = builtYearInfo.querySelectorAll('.sub-info-box');
+  builtYears.forEach((year, index) => {
+    const text = year.querySelector('.text');
+    const total = Object.values(builtYearData.합계)[index];
+    text.textContent = `${total}호`;
   });
-
-  drawPredictionData(dongTitle);
 };

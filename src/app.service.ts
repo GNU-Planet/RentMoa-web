@@ -55,7 +55,7 @@ export class AppService {
       // 각각의 데이터를 처리하여 result 객체에 추가
       전세데이터.forEach(({ 법정동 }) => {
         if (!result[법정동]) {
-          result[법정동] = { 전세: 0, 월세: 0, 합계: 0 };
+          result[법정동] = { 합계: 0, 전세: 0, 월세: 0 };
         }
         result[법정동].전세 += 1;
         result[법정동].합계 += 1;
@@ -63,7 +63,7 @@ export class AppService {
 
       월세데이터.forEach(({ 법정동 }) => {
         if (!result[법정동]) {
-          result[법정동] = { 전세: 0, 월세: 0, 합계: 0 };
+          result[법정동] = { 합계: 0, 전세: 0, 월세: 0 };
         }
         result[법정동].월세 += 1;
         result[법정동].합계 += 1;
@@ -72,25 +72,31 @@ export class AppService {
 
     return result;
   }
-
+  /*
   async getPredictedAmountByArea(
     location: string,
-    charterRent: string,
+    months: Array<number>,
   ): Promise<{
-    [key: string]: { [key: string]: number };
+    [key: string]: {
+      DongBuiltYearData;
+    };
   }> {
-    const result: { [key: string]: { [key: string]: number } } = {};
+    const result = {};
     const bins = [40, 85, 300];
     const labels = ['40㎡ 미만', '40-85㎡', '85㎡ 이상'];
-
-    for (const 계약종료월 of month) {
-      const data = await this.getDetachedHouseRentData(
+    for (const 계약종료월 of months) {
+      const 전세데이터 = await this.getDetachedHouseRentData(
         location,
         계약종료월,
-        charterRent,
+        '전세', // 전세 데이터 가져오기
+      );
+      const 월세데이터 = await this.getDetachedHouseRentData(
+        location,
+        계약종료월,
+        '월세', // 월세 데이터 가져오기
       );
 
-      const 면적별_예측물량 = data.map(({ 계약면적 }) => 계약면적);
+      const 면적별_예측물량 = 전세데이터.map(({ 계약면적 }) => 계약면적);
       const 면적별_예측물량_구간 = 면적별_예측물량.map((면적) => {
         const binIndex = bins.findIndex((bin) => 면적 < bin);
         return labels[binIndex];
@@ -105,41 +111,64 @@ export class AppService {
     }
     return result;
   }
+  */
 
-  async getPredictedAmountByBuiltYear(
-    location: string,
-    charterRent: string,
-  ): Promise<{
-    [key: string]: { [key: string]: number };
-  }> {
-    const result: { [key: string]: { [key: string]: number } } = {};
+  async getPredictedAmountByBuiltYear(location: string, months: Array<number>) {
+    const result = {
+      전세: { '10년 미만': 0, '10-20년': 0, '20-30년': 0, '30년 이상': 0 },
+      월세: { '10년 미만': 0, '10-20년': 0, '20-30년': 0, '30년 이상': 0 },
+      합계: { '10년 미만': 0, '10-20년': 0, '20-30년': 0, '30년 이상': 0 },
+    };
     const bins = [10, 20, 30, 100];
     const labels = ['10년 미만', '10-20년', '20-30년', '30년 이상'];
 
-    for (const 계약종료월 of month) {
-      const data = await this.getDetachedHouseRentData(
+    for (const 계약종료월 of months) {
+      const 전세데이터 = await this.getDetachedHouseRentData(
         location,
         계약종료월,
-        charterRent,
+        '전세', // 전세 데이터 가져오기
+      );
+      const 월세데이터 = await this.getDetachedHouseRentData(
+        location,
+        계약종료월,
+        '월세', // 월세 데이터 가져오기
       );
 
-      const 건축년도별_예측물량 = data
+      const 건축년도별_예측물량_전세 = 전세데이터
         .map(({ 건축년도 }) => 건축년도)
         .filter(Boolean);
-      const 건축년도별_예측물량_구간 = 건축년도별_예측물량.map((년도) => {
-        const binIndex = bins.findIndex(
-          (bin) => new Date().getFullYear() - Number(년도) < bin,
-        );
-        return labels[binIndex];
+      const 건축년도별_예측물량_전세_구간 = 건축년도별_예측물량_전세.map(
+        (년도) => {
+          const binIndex = bins.findIndex(
+            (bin) => new Date().getFullYear() - Number(년도) < bin,
+          );
+          return labels[binIndex];
+        },
+      );
+
+      건축년도별_예측물량_전세_구간.forEach((label) => {
+        result['전세'][label] = (result['전세'][label] || 0) + 1;
+        result['합계'][label] = (result['합계'][label] || 0) + 1;
       });
 
-      const valueCounts = {};
-      건축년도별_예측물량_구간.forEach((label) => {
-        valueCounts[label] = (valueCounts[label] || 0) + 1;
-      });
+      const 건축년도별_예측물량_월세 = 월세데이터
+        .map(({ 건축년도 }) => 건축년도)
+        .filter(Boolean);
+      const 건축년도별_예측물량_월세_구간 = 건축년도별_예측물량_월세.map(
+        (년도) => {
+          const binIndex = bins.findIndex(
+            (bin) => new Date().getFullYear() - Number(년도) < bin,
+          );
+          return labels[binIndex];
+        },
+      );
 
-      result[계약종료월.toString()] = valueCounts;
+      건축년도별_예측물량_월세_구간.forEach((label) => {
+        result['월세'][label] = (result['월세'][label] || 0) + 1;
+        result['합계'][label] = (result['합계'][label] || 0) + 1;
+      });
     }
+
     return result;
   }
 }

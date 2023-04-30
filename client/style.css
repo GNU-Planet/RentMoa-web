@@ -227,26 +227,25 @@ table {
 .info-container .info-box .header-info .close_btn {
   cursor: pointer;
 }
-.info-container .info-box .pre-info {
+.info-container .info-box .info-col-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.info-container .info-box .pre-info .tag {
+.info-container .info-box .info-col-box .tag {
   font-size: 0.7em;
   margin-bottom: 2px;
   border-radius: 3px;
 }
-.info-container .info-box .pre-info .charter-info,
-.info-container .info-box .pre-info .rent-info {
+.info-container .info-box .info-col-box .sub-info-box {
   text-align: center;
 }
-.info-container .info-box .pre-info .text:first-of-type {
+.info-container .info-box .info-col-box .text:first-of-type {
   font-size: 1.5em;
   font-weight: bold;
   color: #5963d9;
 }
-.info-container .info-box .pre-info .text:not(:first-of-type) {
+.info-container .info-box .info-col-box .text:not(:first-of-type) {
   font-size: 1.1em;
 }
 .info-container .info-box .title {

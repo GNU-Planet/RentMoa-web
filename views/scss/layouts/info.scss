@@ -23,7 +23,7 @@
         cursor: pointer;
       }
     }
-    .pre-info {
+    .info-col-box {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -32,8 +32,7 @@
         margin-bottom: 2px;
         border-radius: 3px;
       }
-      .charter-info,
-      .rent-info {
+      .sub-info-box {
         text-align: center;
       }
       .text:first-of-type {

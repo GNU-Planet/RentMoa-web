@@ -1,3 +1,5 @@
+let months = [7];
+
 const addPredictionMonthBtnClickEventListener = () => {
   const predictionMonthBtns = document.querySelectorAll(
     '[id*="predictionMonthBtn"]',
@@ -11,10 +13,11 @@ const addPredictionMonthBtnClickEventListener = () => {
       // 클릭한 버튼에 selected 클래스 추가
       btn.classList.add('selected');
       // 클릭한 버튼의 id에서 월 값을 추출하여 months 배열에 추가
-      const month = btn.id.split('-')[1];
+      months = [];
+      months.push(parseInt(btn.id.split('-')[1]));
       const data = {
         location: '진주시',
-        months: [parseInt(month)],
+        months,
       };
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `/dong`);

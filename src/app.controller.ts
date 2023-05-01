@@ -25,26 +25,23 @@ export class AppController {
     const API_KEY = this.configService.get('KAKAO_MAPS_API_KEY');
     return { API_KEY, result };
   }
-  /*
-  @Get('/type-area')
+
+  @Post('/type-area')
   async getPredictedAmountByArea(
-    @Query('location') location: string,
-    @Query('charterRent') charterRent: string,
-  ): Promise<{
-    region: string;
-    result: { [key: string]: { [key: string]: number } };
-  }> {
+    @Body('location') location: string,
+    @Body('months') months: Array<number>,
+  ) {
     if (!location) {
       location = '진주시';
     }
-    if (!charterRent) {
-      charterRent = '전월세';
-    }
-    const result = await this.appService.getPredictedAmountByArea(location);
 
-    return { region: location, result };
+    const result = await this.appService.getPredictedAmountByArea(
+      location,
+      months,
+    );
+
+    return { result };
   }
-  */
 
   @Post('/dong')
   async getPredictedAmountByDong(
@@ -58,7 +55,7 @@ export class AppController {
       location,
       months,
     );
-    return { region: location, result };
+    return { result };
   }
 
   @Post('/built-year')

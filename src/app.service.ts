@@ -4,7 +4,6 @@ import { Like, Not, Repository, FindManyOptions, Equal } from 'typeorm';
 import { DetachedHouseRent } from './entity/app.entity';
 
 const year = 2023;
-const month = [7, 8, 9, 10, 11, 12];
 
 @Injectable()
 export class AppService {
@@ -72,16 +71,13 @@ export class AppService {
 
     return result;
   }
-  /*
-  async getPredictedAmountByArea(
-    location: string,
-    months: Array<number>,
-  ): Promise<{
-    [key: string]: {
-      DongBuiltYearData;
+
+  async getPredictedAmountByArea(location: string, months: Array<number>) {
+    const result = {
+      전세: { '40㎡ 미만': 0, '40-85㎡': 0, '85㎡ 이상': 0 },
+      월세: { '40㎡ 미만': 0, '40-85㎡': 0, '85㎡ 이상': 0 },
+      합계: { '40㎡ 미만': 0, '40-85㎡': 0, '85㎡ 이상': 0 },
     };
-  }> {
-    const result = {};
     const bins = [40, 85, 300];
     const labels = ['40㎡ 미만', '40-85㎡', '85㎡ 이상'];
     for (const 계약종료월 of months) {
@@ -96,22 +92,28 @@ export class AppService {
         '월세', // 월세 데이터 가져오기
       );
 
-      const 면적별_예측물량 = 전세데이터.map(({ 계약면적 }) => 계약면적);
-      const 면적별_예측물량_구간 = 면적별_예측물량.map((면적) => {
+      const 면적별_예측물량_전세 = 전세데이터.map(({ 계약면적 }) => 계약면적);
+      const 면적별_예측물량_전세_구간 = 면적별_예측물량_전세.map((면적) => {
         const binIndex = bins.findIndex((bin) => 면적 < bin);
         return labels[binIndex];
       });
-
-      const valueCounts = {};
-      면적별_예측물량_구간.forEach((label) => {
-        valueCounts[label] = (valueCounts[label] || 0) + 1;
+      면적별_예측물량_전세_구간.forEach((label) => {
+        result['전세'][label] = (result['전세'][label] || 0) + 1;
+        result['합계'][label] = (result['합계'][label] || 0) + 1;
       });
 
-      result[계약종료월.toString()] = valueCounts;
+      const 면적별_예측물량_월세 = 월세데이터.map(({ 계약면적 }) => 계약면적);
+      const 면적별_예측물량_월세_구간 = 면적별_예측물량_월세.map((면적) => {
+        const binIndex = bins.findIndex((bin) => 면적 < bin);
+        return labels[binIndex];
+      });
+      면적별_예측물량_월세_구간.forEach((label) => {
+        result['월세'][label] = (result['월세'][label] || 0) + 1;
+        result['합계'][label] = (result['합계'][label] || 0) + 1;
+      });
     }
     return result;
   }
-  */
 
   async getPredictedAmountByBuiltYear(location: string, months: Array<number>) {
     const result = {

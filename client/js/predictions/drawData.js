@@ -2,7 +2,7 @@ const filterContainer = document.querySelectorAll('.filter-container');
 const infoContainer = document.querySelector('.info-container');
 const filterBtns = document.querySelectorAll('.filterBtn');
 
-const drawPredictionData = (dongTitle, builtYearData) => {
+const drawPredictionData = (dongTitle, builtYearData, typeAreaData) => {
   const closeBtn = infoContainer.querySelector('.close_btn');
   infoContainer.classList.remove('except-content');
   // 기존 사이드 필터박스 삭제
@@ -30,10 +30,23 @@ const drawPredictionData = (dongTitle, builtYearData) => {
   const preInfo = document.querySelector('.pre-info');
   const preTypes = preInfo.querySelectorAll('.sub-info-box');
 
-  console.log(Object.values(result[dongTitle]));
   preTypes.forEach((year, index) => {
     const text = year.querySelector('.text');
-    const total = Object.values(result[dongTitle])[index] || 0;
+    let total;
+    if (result[dongTitle]) {
+      total = Object.values(result[dongTitle])[index];
+    } else {
+      total = 0;
+    }
+    text.textContent = `${total}호`;
+  });
+
+  // 면적별 예측물량 그리기
+  const typeAreaInfo = document.querySelector('.type-area-info');
+  const typeAreas = typeAreaInfo.querySelectorAll('.sub-info-box');
+  typeAreas.forEach((year, index) => {
+    const text = year.querySelector('.text');
+    const total = Object.values(typeAreaData.합계)[index];
     text.textContent = `${total}호`;
   });
 

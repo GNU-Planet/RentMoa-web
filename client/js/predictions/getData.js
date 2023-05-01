@@ -1,11 +1,11 @@
-const getBuiltYearData = (dongTitle) => {
+const requestData = (dongTitle, endpoint) => {
   return new Promise((resolve, reject) => {
     const data = {
       location: dongTitle,
-      months: [7],
+      months,
     };
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', `/built-year`);
+    xhr.open('POST', endpoint);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(data));
     xhr.onreadystatechange = function () {
@@ -40,8 +40,9 @@ const getPredictionData = async (e) => {
   });
 
   try {
-    const builtYearData = await getBuiltYearData(dongTitle);
-    drawPredictionData(dongTitle, builtYearData);
+    const builtYearData = await requestData(dongTitle, '/built-year');
+    const typeAreaData = await requestData(dongTitle, '/type-area');
+    drawPredictionData(dongTitle, builtYearData, typeAreaData);
   } catch (err) {
     console.log(err);
   }

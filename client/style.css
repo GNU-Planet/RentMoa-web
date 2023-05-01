@@ -216,7 +216,7 @@ table {
   border-bottom: 3px solid #4e59cf;
 }
 .info-container .info-box {
-  border-bottom: 3px solid lightgray;
+  border-bottom: 3px solid #eaebed;
   padding: 20px;
 }
 .info-container .info-box .header-info {

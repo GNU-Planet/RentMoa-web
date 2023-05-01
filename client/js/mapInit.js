@@ -1,9 +1,9 @@
 let markers;
 
 const updateMarkers = (markers, result) => {
+  const parser = new DOMParser();
   markers.forEach((marker) => {
     const content = marker.getContent();
-    const parser = new DOMParser();
     const dom = parser.parseFromString(content, 'text/html');
     const dongTitleEl = dom.querySelector('.dong-title');
     const dongCountEl = dom.querySelector('.dong-count');
@@ -16,10 +16,20 @@ const updateMarkers = (markers, result) => {
   drawNoCount();
   addDongBtnClickEventListener();
 };
+
+const handleClick = async function () {
+  await getPredictionData(this);
+  const lat = Number(this.dataset.lat);
+  const lng = Number(this.dataset.lng);
+  map.panTo(new kakao.maps.LatLng(lat, lng));
+  drawNoCount();
+};
+
 const addDongBtnClickEventListener = () => {
   const dongBtns = document.querySelectorAll('.dong-box');
   dongBtns.forEach((btn) => {
-    btn.addEventListener('click', getPredictionData);
+    btn.removeEventListener('click', handleClick);
+    btn.addEventListener('click', handleClick);
   });
 };
 
@@ -49,7 +59,7 @@ const geoJsonData = fetch('client/json/Jinju_dong_centerLocation.json')
 
 geoJsonData.then((data) => {
   markers = data.map((location) => {
-    const content = `<div class="dong-box">
+    const content = `<div class="dong-box" data-lat=${location.lat} data-lng=${location.lng}>
                       <p class="dong-title">${location.dong}</p>
                       <p class="dong-count"></p>
                     </div>`;
@@ -61,6 +71,7 @@ geoJsonData.then((data) => {
       xAnchor: 0.5,
       yAnchor: 1.0,
     });
+
     return customOverlay;
   });
   updateMarkers(markers, result);

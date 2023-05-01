@@ -1,4 +1,4 @@
-div(class='info-container')
+div(class='info-container except-content')
   div(class='info-box center-content')
     div(class='header-info')
       i(class="fa-solid fa-arrow-left")
@@ -18,28 +18,7 @@ div(class='info-container')
         p(class='text') 0호
   div(class='info-box')
     p(class='title') 면적별 예측물량
-    div(class='info-col-box type-area-info')
-      div(class='sub-info-box')
-        p(class="tag") 40㎡ 미만
-        p(class='text') 0호
-      div(class='sub-info-box')
-        p(class="tag") 40~85㎡ 미만
-        p(class='text') 0호
-      div(class='sub-info-box')
-        p(class="tag") 85㎡ 이상
-        p(class='text') 0호
+    <div id="type_area-graph-container" style="width:100%; height:200px;"></div>
   div(class='info-box')
     p(class='title') 건축연한별 예측물량
-    div(class='info-col-box built-year-info')
-      div(class='sub-info-box')
-        p(class="tag") 10년 미만
-        p(class='text') 0호
-      div(class='sub-info-box')
-        p(class="tag") 10~20년
-        p(class='text') 0호
-      div(class='sub-info-box')
-        p(class="tag") 20~30년
-        p(class='text') 0호
-      div(class='sub-info-box')
-        p(class="tag") 30년 이상
-        p(class='text') 0호
+    <div id="built_year-graph-container" style="width:100%; height:200px;"></div>

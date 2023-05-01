@@ -40,22 +40,9 @@ const drawPredictionData = (dongTitle, builtYearData, typeAreaData) => {
     }
     text.textContent = `${total}호`;
   });
-
   // 면적별 예측물량 그리기
-  const typeAreaInfo = document.querySelector('.type-area-info');
-  const typeAreas = typeAreaInfo.querySelectorAll('.sub-info-box');
-  typeAreas.forEach((year, index) => {
-    const text = year.querySelector('.text');
-    const total = Object.values(typeAreaData.합계)[index];
-    text.textContent = `${total}호`;
-  });
+  drawTypeAreaGraph(typeAreaData);
 
   // 건축연한별 예측물량 그리기
-  const builtYearInfo = document.querySelector('.built-year-info');
-  const builtYears = builtYearInfo.querySelectorAll('.sub-info-box');
-  builtYears.forEach((year, index) => {
-    const text = year.querySelector('.text');
-    const total = Object.values(builtYearData.합계)[index];
-    text.textContent = `${total}호`;
-  });
+  drawBuiltYearGraph(builtYearData);
 };

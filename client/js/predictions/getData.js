@@ -23,9 +23,8 @@ const requestData = (dongTitle, endpoint) => {
   });
 };
 
-const getPredictionData = async (e) => {
-  const dongTitle =
-    e.target.parentNode.querySelector('.dong-title').textContent;
+const getPredictionData = async (btn) => {
+  const dongTitle = btn.querySelector('.dong-title').textContent;
   let selectedClass = null;
 
   filterBtns.forEach((btn) => {

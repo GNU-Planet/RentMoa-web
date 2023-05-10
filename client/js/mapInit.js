@@ -1,7 +1,4 @@
-let dongMarkers;
-let offiMarkers;
-
-const updatedDongMarkers = (dongMarkers, result) => {
+const updateDongMarkers = (dongMarkers, result) => {
   const parser = new DOMParser();
   dongMarkers.forEach((marker) => {
     const content = marker.getContent();
@@ -17,8 +14,6 @@ const updatedDongMarkers = (dongMarkers, result) => {
   drawNoCount();
   addDongBtnClickEventListener();
 };
-
-const hideDongMarkers = (dongMarkers) => {};
 
 const handleClick = async function () {
   await getPredictionData(this);
@@ -77,7 +72,7 @@ dongGeoJsonData.then((data) => {
 
     return customOverlay;
   });
-  updatedDongMarkers(dongMarkers, result);
+  updateDongMarkers(dongMarkers, result);
 });
 
 const offiGeoJsonData = fetch('client/json/Jinju_offi_centerLocation.json')
@@ -114,7 +109,6 @@ kakao.maps.event.addListener(map, 'dragend', function () {
 // 확대 레벨 변경 이벤트 핸들러
 kakao.maps.event.addListener(map, 'zoom_changed', function () {
   var currentZoomLevel = map.getLevel(); // 현재 확대 레벨 확인
-  console.log(currentZoomLevel);
 
   if (currentZoomLevel > 4) {
     dongMarkers.forEach((marker) => {

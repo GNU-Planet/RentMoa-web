@@ -19,11 +19,30 @@ export class AppController {
   @Get('/map')
   @Render('map')
   async getMap() {
-    const result = await this.appService.getPredictedAmountByDong('진주시', [
-      7,
-    ]);
+    const result = await this.appService.getPredictedAmountByDong(
+      '오피스텔',
+      '진주시',
+      [7],
+    );
     const API_KEY = this.configService.get('KAKAO_MAPS_API_KEY');
     return { API_KEY, result };
+  }
+
+  @Post('/dong')
+  async getPredictedAmountByDong(
+    @Body('houseType') houseType: string,
+    @Body('location') location: string,
+    @Body('months') months: Array<number>,
+  ) {
+    if (!location) {
+      location = '진주시';
+    }
+    const result = await this.appService.getPredictedAmountByDong(
+      houseType,
+      location,
+      months,
+    );
+    return { result };
   }
 
   @Post('/type-area')
@@ -40,21 +59,6 @@ export class AppController {
       months,
     );
 
-    return { result };
-  }
-
-  @Post('/dong')
-  async getPredictedAmountByDong(
-    @Body('location') location: string,
-    @Body('months') months: Array<number>,
-  ) {
-    if (!location) {
-      location = '진주시';
-    }
-    const result = await this.appService.getPredictedAmountByDong(
-      location,
-      months,
-    );
     return { result };
   }
 

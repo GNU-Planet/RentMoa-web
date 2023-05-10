@@ -1,18 +1,16 @@
-const addPredictionMonthBtnClickEventListener = () => {
-  const predictionMonthBtns = document.querySelectorAll(
-    '[id*="predictionMonthBtn"]',
-  );
-  predictionMonthBtns.forEach((btn) => {
+const addHouseTypeBtnClickEventListener = () => {
+  const housingTypeBtns = document.querySelectorAll('[id*="housingTypeBtn"]');
+  housingTypeBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       // 기존의 selected 버튼 삭제
-      predictionMonthBtns.forEach((btn) => {
+      housingTypeBtns.forEach((btn) => {
         btn.classList.remove('selected');
       });
       // 클릭한 버튼에 selected 클래스 추가
       btn.classList.add('selected');
-      // 클릭한 버튼의 id에서 월 값을 추출하여 months 배열에 추가
-      months = [];
-      months.push(parseInt(btn.id.split('-')[1]));
+      // 클릭한 버튼의 id에서 houseType 추출
+      houseType = btn.textContent.replace('/', '');
+
       const data = {
         houseType,
         location: '진주시',
@@ -37,4 +35,4 @@ const addPredictionMonthBtnClickEventListener = () => {
   });
 };
 
-addPredictionMonthBtnClickEventListener();
+addHouseTypeBtnClickEventListener();

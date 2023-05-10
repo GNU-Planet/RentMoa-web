@@ -158,6 +158,14 @@ table {
   font-size: 10px;
   border-radius: 3px;
 }
+.dong-box .dong-title {
+  color: yellow;
+  font-size: 0.9em;
+}
+.dong-box .dong-count {
+  color: white;
+  font-size: 1.2em;
+}
 .dong-box.no-count {
   background-color: gray;
 }
@@ -165,14 +173,36 @@ table {
   color: #dbdce8;
 }
 
-.dong-title {
-  color: yellow;
-  font-size: 0.9em;
+.offi-box {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
 }
 
-.dong-count {
-  color: white;
-  font-size: 1.2em;
+.offi-box::before,
+.offi-box::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.offi-box::before {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 0 5px 10px 5px;
+  border-color: transparent transparent #ff0000 transparent;
+}
+
+.offi-box::after {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px 10px 0 10px;
+  border-color: #ff0000 transparent transparent transparent;
 }
 
 .filter-container {

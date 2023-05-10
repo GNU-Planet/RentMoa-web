@@ -1,8 +1,9 @@
-let markers;
+let dongMarkers;
+let offiMarkers;
 
-const updateMarkers = (markers, result) => {
+const updatedDongMarkers = (dongMarkers, result) => {
   const parser = new DOMParser();
-  markers.forEach((marker) => {
+  dongMarkers.forEach((marker) => {
     const content = marker.getContent();
     const dom = parser.parseFromString(content, 'text/html');
     const dongTitleEl = dom.querySelector('.dong-title');
@@ -16,6 +17,8 @@ const updateMarkers = (markers, result) => {
   drawNoCount();
   addDongBtnClickEventListener();
 };
+
+const hideDongMarkers = (dongMarkers) => {};
 
 const handleClick = async function () {
   await getPredictionData(this);
@@ -51,14 +54,14 @@ var options = {
 
 var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
-const geoJsonData = fetch('client/json/Jinju_dong_centerLocation.json')
+const dongGeoJsonData = fetch('client/json/Jinju_dong_centerLocation.json')
   .then((response) => response.json())
   .then((data) => {
     return data;
   });
 
-geoJsonData.then((data) => {
-  markers = data.map((location) => {
+dongGeoJsonData.then((data) => {
+  dongMarkers = data.map((location) => {
     const content = `<div class="dong-box" data-lat=${location.lat} data-lng=${location.lng}>
                       <p class="dong-title">${location.dong}</p>
                       <p class="dong-count"></p>
@@ -74,11 +77,58 @@ geoJsonData.then((data) => {
 
     return customOverlay;
   });
-  updateMarkers(markers, result);
+  updatedDongMarkers(dongMarkers, result);
 });
 
+const offiGeoJsonData = fetch('client/json/Jinju_offi_centerLocation.json')
+  .then((response) => response.json())
+  .then((data) => {
+    return data;
+  });
+
+offiGeoJsonData.then((data) => {
+  offiMarkers = data.map((location) => {
+    var markerImage = new kakao.maps.MarkerImage(
+      'client/houseIcon.png',
+      new kakao.maps.Size(50, 50),
+      { offset: new kakao.maps.Point(15, 30) },
+    );
+    const position = new kakao.maps.LatLng(location.lat, location.lng);
+    // 마커를 생성합니다
+    const customOverlay = new kakao.maps.Marker({
+      map: null,
+      position: position,
+      image: markerImage, // 마커이미지 설정
+    });
+
+    return customOverlay;
+  });
+});
+
+// 맵 스크롤 이벤트 핸들러
 kakao.maps.event.addListener(map, 'dragend', function () {
-  // 스크롤 이동 시 실행할 코드 작성
   drawNoCount();
   addDongBtnClickEventListener();
+});
+
+// 확대 레벨 변경 이벤트 핸들러
+kakao.maps.event.addListener(map, 'zoom_changed', function () {
+  var currentZoomLevel = map.getLevel(); // 현재 확대 레벨 확인
+  console.log(currentZoomLevel);
+
+  if (currentZoomLevel > 4) {
+    dongMarkers.forEach((marker) => {
+      marker.setMap(map);
+    });
+    offiMarkers.forEach((marker) => {
+      marker.setMap(null);
+    });
+  } else {
+    dongMarkers.forEach((marker) => {
+      marker.setMap(null);
+    });
+    offiMarkers.forEach((marker) => {
+      marker.setMap(map);
+    });
+  }
 });

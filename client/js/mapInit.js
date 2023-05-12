@@ -31,10 +31,6 @@ const addDongBtnClickEventListener = () => {
   });
 };
 
-const addHouseBtnClickEventListener = () => {
-  const houseBtns = document.querySelectorAll('.');
-};
-
 const drawNoCount = () => {
   const dongCounts = document.querySelectorAll('.dong-count');
   dongCounts.forEach((count) => {

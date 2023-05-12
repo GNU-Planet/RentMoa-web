@@ -1,9 +1,30 @@
 const filterContainer = document.querySelectorAll('.filter-container');
 const filterBtns = document.querySelectorAll('.filterBtn');
 const detachedContainer = document.querySelector('.detached-container');
+let infoContainer;
 
-const drawPredictionData = (dongTitle, builtYearData, typeAreaData) => {
-  let infoContainer;
+const drawHousePredictionData = (houseName, houseAddress) => {
+  infoContainer = document.querySelector('.house-container');
+  const closeBtn = infoContainer.querySelector('.close_btn');
+  infoContainer.classList.remove('except-content');
+  // 기존 사이드 필터박스 삭제
+  closeBtn.addEventListener('click', () => {
+    infoContainer.classList.add('except-content');
+    filterContainer.forEach((container) => {
+      container.classList.remove('except-content');
+    });
+  });
+
+  // 예측 header 정보창 그리기
+  const headerInfo = infoContainer.querySelector('.header-info');
+  const dong = headerInfo.querySelector('.title');
+  const month = headerInfo.nextElementSibling;
+
+  dong.innerHTML = houseName;
+  month.innerHTML = houseAddress;
+};
+
+const drawDongPredictionData = (dongTitle, builtYearData, typeAreaData) => {
   if (houseType == '오피스텔')
     infoContainer = document.querySelector('.offi-container');
   else if (houseType == '단독다가구')

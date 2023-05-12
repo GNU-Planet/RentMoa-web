@@ -16,7 +16,7 @@ const updateDongMarkers = (dongMarkers, result) => {
 };
 
 const handleClick = async function () {
-  await getPredictionData(this);
+  await getDongPredictionData(this);
   const lat = Number(this.dataset.lat);
   const lng = Number(this.dataset.lng);
   map.panTo(new kakao.maps.LatLng(lat, lng));
@@ -29,6 +29,10 @@ const addDongBtnClickEventListener = () => {
     btn.removeEventListener('click', handleClick);
     btn.addEventListener('click', handleClick);
   });
+};
+
+const addHouseBtnClickEventListener = () => {
+  const houseBtns = document.querySelectorAll('.');
 };
 
 const drawNoCount = () => {
@@ -82,18 +86,41 @@ const offiGeoJsonData = fetch('client/json/Jinju_offi_centerLocation.json')
   });
 
 offiGeoJsonData.then((data) => {
-  offiMarkers = data.map((location) => {
+  offiMarkers = data.map((data) => {
     var markerImage = new kakao.maps.MarkerImage(
       'client/houseIcon.png',
       new kakao.maps.Size(50, 50),
       { offset: new kakao.maps.Point(15, 30) },
     );
-    const position = new kakao.maps.LatLng(location.lat, location.lng);
+    const position = new kakao.maps.LatLng(data.lat, data.lng);
     // 마커를 생성합니다
     const customOverlay = new kakao.maps.Marker({
       map: null,
       position: position,
       image: markerImage, // 마커이미지 설정
+    });
+    const houseInfoWindow = new kakao.maps.InfoWindow({
+      content: `
+      <div class="house-info-window_name" data-name="${data.db_name}"> ${data.show_name}</div>
+      <div class="house-info-window_address"> ${data.do} ${data.si} ${data.dong} ${data.zibun}</div>
+      `,
+    });
+
+    kakao.maps.event.addListener(customOverlay, 'click', function () {
+      const lat = this.getPosition().getLat();
+      const lng = this.getPosition().getLng();
+      getHousePredictionData(houseInfoWindow.getContent());
+      map.panTo(new kakao.maps.LatLng(lat, lng));
+    });
+    // 마우스오버 이벤트 설정
+    kakao.maps.event.addListener(customOverlay, 'mouseover', function () {
+      // 인포윈도우 설정
+      houseInfoWindow.open(map, customOverlay);
+    });
+
+    // 마우스아웃 이벤트 설정
+    kakao.maps.event.addListener(customOverlay, 'mouseout', function () {
+      houseInfoWindow.close();
     });
 
     return customOverlay;
@@ -125,4 +152,6 @@ kakao.maps.event.addListener(map, 'zoom_changed', function () {
       marker.setMap(map);
     });
   }
+
+  drawNoCount();
 });

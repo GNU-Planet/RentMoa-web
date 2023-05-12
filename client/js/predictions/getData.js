@@ -23,15 +23,32 @@ const requestData = (dongTitle, endpoint) => {
   });
 };
 
-const getPredictionData = async (btn) => {
-  const dongTitle = btn.querySelector('.dong-title').textContent;
-  let selectedClass = null;
+const getHousePredictionData = async (infoWindow) => {
+  const tempElement = document.createElement('div');
+  tempElement.innerHTML = infoWindow;
 
-  filterBtns.forEach((btn) => {
-    if (btn.classList.contains('selected')) {
-      selectedClass = btn.id.split('-')[0];
-    }
-  });
+  const houseShowName = tempElement.querySelector(
+    '.house-info-window_name',
+  ).textContent;
+
+  const houseDBName = tempElement
+    .querySelector('.house-info-window_name')
+    .getAttribute('data-name');
+
+  // Retrieve the content of the element with class house-info-window_address
+  const houseAddress = tempElement.querySelector(
+    '.house-info-window_address',
+  ).textContent;
+
+  try {
+    drawHousePredictionData(houseShowName, houseAddress);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const getDongPredictionData = async (btn) => {
+  const dongTitle = btn.querySelector('.dong-title').textContent;
 
   // 필터 컨테이너 삭제
   filterContainer.forEach((container) => {
@@ -41,7 +58,7 @@ const getPredictionData = async (btn) => {
   try {
     const builtYearData = await requestData(dongTitle, '/built-year');
     const typeAreaData = await requestData(dongTitle, '/type-area');
-    drawPredictionData(dongTitle, builtYearData, typeAreaData);
+    drawDongPredictionData(dongTitle, builtYearData, typeAreaData);
   } catch (err) {
     console.log(err);
   }

@@ -1,8 +1,13 @@
 const filterContainer = document.querySelectorAll('.filter-container');
-const infoContainer = document.querySelector('.info-container');
 const filterBtns = document.querySelectorAll('.filterBtn');
+const detachedContainer = document.querySelector('.detached-container');
 
 const drawPredictionData = (dongTitle, builtYearData, typeAreaData) => {
+  let infoContainer;
+  if (houseType == '오피스텔')
+    infoContainer = document.querySelector('.offi-container');
+  else if (houseType == '단독다가구')
+    infoContainer = document.querySelector('.detached-container');
   const closeBtn = infoContainer.querySelector('.close_btn');
   infoContainer.classList.remove('except-content');
   // 기존 사이드 필터박스 삭제
@@ -14,7 +19,7 @@ const drawPredictionData = (dongTitle, builtYearData, typeAreaData) => {
   });
 
   // 예측 header 정보창 그리기
-  const headerInfo = document.querySelector('.header-info');
+  const headerInfo = infoContainer.querySelector('.header-info');
   const dong = headerInfo.querySelector('.title');
   const month = headerInfo.nextElementSibling;
   let monthInfo;
@@ -26,8 +31,8 @@ const drawPredictionData = (dongTitle, builtYearData, typeAreaData) => {
   dong.innerHTML = dongTitle;
   month.innerHTML = `2023년 ${monthInfo}월`;
 
-  // 전월세 요약 정보창 그리기
-  const preInfo = document.querySelector('.pre-info');
+  // 공통 전월세 요약 정보창 그리기
+  const preInfo = infoContainer.querySelector('.pre-info');
   const preTypes = preInfo.querySelectorAll('.sub-info-box');
 
   preTypes.forEach((year, index) => {
@@ -40,9 +45,15 @@ const drawPredictionData = (dongTitle, builtYearData, typeAreaData) => {
     }
     text.textContent = `${total}호`;
   });
-  // 면적별 예측물량 그리기
-  drawTypeAreaGraph(typeAreaData);
 
-  // 건축연한별 예측물량 그리기
-  drawBuiltYearGraph(builtYearData);
+  // 오피스텔 전월세 요약 정보창 그리기
+
+  // 단독다가구 전월세 요약 정보창 그리기
+  if (houseType == '단독다가구') {
+    // 면적별 예측물량 그리기
+    drawTypeAreaGraph(typeAreaData);
+
+    // 건축연한별 예측물량 그리기
+    drawBuiltYearGraph(builtYearData);
+  }
 };

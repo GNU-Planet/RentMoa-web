@@ -2,10 +2,11 @@ extends layouts/base
 
 block content
   div.modal-container
-    include ./layouts/info.pug
+    include ./layouts/detachedInfo.pug
+    include ./layouts/offiInfo.pug
   div.side-container
-    include ./partials/housingTypeFilter.pug
-    include ./partials/predictionMonthFilter.pug
+    include ./partials/filter/housingTypeFilter.pug
+    include ./partials/filter/predictionMonthFilter.pug
   div#map
 
 block scripts

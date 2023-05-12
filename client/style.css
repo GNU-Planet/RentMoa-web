@@ -257,6 +257,9 @@ table {
 .info-container .info-box .header-info .close_btn {
   cursor: pointer;
 }
+.info-container .info-box .apt-info {
+  margin-bottom: 15px;
+}
 .info-container .info-box .info-col-box {
   display: flex;
   justify-content: space-between;

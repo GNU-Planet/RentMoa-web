@@ -4,6 +4,7 @@ const detachedContainer = document.querySelector('.detached-container');
 let infoContainer;
 
 const drawHousePredictionData = (houseName, houseAddress) => {
+  if (infoContainer) infoContainer.classList.add('except-content');
   infoContainer = document.querySelector('.house-container');
   const closeBtn = infoContainer.querySelector('.close_btn');
   infoContainer.classList.remove('except-content');
@@ -25,6 +26,7 @@ const drawHousePredictionData = (houseName, houseAddress) => {
 };
 
 const drawDongPredictionData = (dongTitle, builtYearData, typeAreaData) => {
+  if (infoContainer) infoContainer.classList.add('except-content');
   if (houseType == '오피스텔')
     infoContainer = document.querySelector('.offi-container');
   else if (houseType == '단독다가구')

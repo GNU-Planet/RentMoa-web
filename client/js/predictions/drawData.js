@@ -3,7 +3,7 @@ const filterBtns = document.querySelectorAll('.filterBtn');
 const detachedContainer = document.querySelector('.detached-container');
 let infoContainer;
 
-const drawHousePredictionData = (houseName, houseAddress) => {
+const drawHousePredictionData = (houseName, houseAddress, houseData) => {
   if (infoContainer) infoContainer.classList.add('except-content');
   infoContainer = document.querySelector('.house-container');
   const closeBtn = infoContainer.querySelector('.close_btn');
@@ -18,11 +18,20 @@ const drawHousePredictionData = (houseName, houseAddress) => {
 
   // 예측 header 정보창 그리기
   const headerInfo = infoContainer.querySelector('.header-info');
-  const dong = headerInfo.querySelector('.title');
-  const month = headerInfo.nextElementSibling;
+  const houseNameQuery = headerInfo.querySelector('.title');
+  const houseAddressQuery = headerInfo.nextElementSibling;
 
-  dong.innerHTML = houseName;
-  month.innerHTML = houseAddress;
+  houseNameQuery.innerHTML = houseName;
+  houseAddressQuery.innerHTML = houseAddress;
+
+  // 공통 전월세 요약 정보창 그리기
+  const preInfo = infoContainer.querySelector('.pre-info');
+  const preTypes = preInfo.querySelectorAll('.sub-info-box');
+
+  preTypes.forEach((count, index) => {
+    const text = count.querySelector('.text');
+    text.textContent = `${Object.values(houseData)[index]}호`;
+  });
 };
 
 const drawDongPredictionData = (dongTitle, builtYearData, typeAreaData) => {
@@ -61,7 +70,7 @@ const drawDongPredictionData = (dongTitle, builtYearData, typeAreaData) => {
   preTypes.forEach((year, index) => {
     const text = year.querySelector('.text');
     let total;
-    if (result[dongTitle]) {
+    if (result) {
       total = Object.values(result[dongTitle])[index];
     } else {
       total = 0;

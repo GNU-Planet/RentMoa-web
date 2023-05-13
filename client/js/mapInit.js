@@ -16,7 +16,7 @@ const updateDongMarkers = (dongMarkers, result) => {
 };
 
 const handleClick = async function () {
-  await getDongPredictionData(this);
+  await getDetachedHousePredictionData(this);
   const lat = Number(this.dataset.lat);
   const lng = Number(this.dataset.lng);
   map.panTo(new kakao.maps.LatLng(lat, lng));
@@ -97,7 +97,7 @@ offiGeoJsonData.then((data) => {
     });
     const houseInfoWindow = new kakao.maps.InfoWindow({
       content: `
-      <div class="house-info-window_name" data-name="${data.db_name}"> ${data.show_name}</div>
+      <div class="house-info-window_name" data-house="${data.db_name}"> ${data.show_name}</div>
       <div class="house-info-window_address"> ${data.do} ${data.si} ${data.dong} ${data.zibun}</div>
       `,
     });

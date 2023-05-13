@@ -1,13 +1,9 @@
-const requestData = (dongTitle, endpoint) => {
+const requestData = (body, endpoint) => {
   return new Promise((resolve, reject) => {
-    const data = {
-      location: dongTitle,
-      months,
-    };
     const xhr = new XMLHttpRequest();
     xhr.open('POST', endpoint);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify(data));
+    xhr.send(JSON.stringify(body));
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         if (xhr.status === 201) {
@@ -31,9 +27,8 @@ const getHousePredictionData = async (infoWindow) => {
     '.house-info-window_name',
   ).textContent;
 
-  const houseDBName = tempElement
-    .querySelector('.house-info-window_name')
-    .getAttribute('data-name');
+  let houseDBName = tempElement.querySelector('.house-info-window_name');
+  houseDBName = houseDBName.getAttribute('data-house');
 
   // Retrieve the content of the element with class house-info-window_address
   const houseAddress = tempElement.querySelector(
@@ -41,13 +36,19 @@ const getHousePredictionData = async (infoWindow) => {
   ).textContent;
 
   try {
-    drawHousePredictionData(houseShowName, houseAddress);
+    const body = {
+      houseType,
+      houseName: houseDBName,
+      months,
+    };
+    const houseData = await requestData(body, '/house');
+    drawHousePredictionData(houseShowName, houseAddress, houseData);
   } catch (err) {
     console.log(err);
   }
 };
 
-const getDongPredictionData = async (btn) => {
+const getDetachedHousePredictionData = async (btn) => {
   const dongTitle = btn.querySelector('.dong-title').textContent;
 
   // 필터 컨테이너 삭제
@@ -56,8 +57,12 @@ const getDongPredictionData = async (btn) => {
   });
 
   try {
-    const builtYearData = await requestData(dongTitle, '/built-year');
-    const typeAreaData = await requestData(dongTitle, '/type-area');
+    const body = {
+      location: dongTitle,
+      months,
+    };
+    const builtYearData = await requestData(body, '/built-year');
+    const typeAreaData = await requestData(body, '/type-area');
     drawDongPredictionData(dongTitle, builtYearData, typeAreaData);
   } catch (err) {
     console.log(err);

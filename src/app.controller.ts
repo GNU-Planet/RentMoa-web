@@ -45,6 +45,23 @@ export class AppController {
     return { result };
   }
 
+  // 아파트&오피스텔 예측 요약
+  @Post('/house')
+  async getPredictedAmountByHouse(
+    @Body('houseType') houseType: string,
+    @Body('houseName') houseName: string,
+    @Body('months') months: Array<number>,
+  ) {
+    const result = await this.appService.getPredictedAmountByHouse(
+      houseType,
+      houseName,
+      months,
+    );
+
+    return { result };
+  }
+
+  // 단독다가구 주택유형별 예측
   @Post('/type-area')
   async getPredictedAmountByArea(
     @Body('location') location: string,
@@ -62,6 +79,7 @@ export class AppController {
     return { result };
   }
 
+  // 단독다가구 건축연한별 예측
   @Post('/built-year')
   async getPredictedAmountByBuiltYear(
     @Body('location') location: string,

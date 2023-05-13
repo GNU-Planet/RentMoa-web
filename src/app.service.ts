@@ -18,7 +18,7 @@ export class AppService {
     this.offiRentRepository = offiRentRepository;
   }
 
-  async getDetachedHouseRentData(
+  async getHouseDongData(
     houseType: string,
     location: string,
     month: number,
@@ -42,6 +42,30 @@ export class AppService {
       return await this.offiRentRepository.find(options);
   }
 
+  async getHouseDetailData(
+    houseType: string,
+    houseName: string,
+    month: number,
+    charterRent: string,
+  ) {
+    const options: FindManyOptions = {
+      where: {
+        계약종료년: year,
+        계약종료월: month,
+        단지: houseName,
+      },
+    };
+    if (charterRent == '월세') {
+      options.where['월세금액'] = Not(Equal(0));
+    } else if (charterRent == '전세') {
+      options.where['월세금액'] = Equal(0);
+    }
+    if (houseType == '단독다가구')
+      return await this.detachedHouseRentRepository.find(options);
+    else if (houseType == '오피스텔')
+      return await this.offiRentRepository.find(options);
+  }
+
   async getPredictedAmountByDong(
     houseType: string,
     location: string,
@@ -49,13 +73,13 @@ export class AppService {
   ): Promise<{ [key: string]: { 전세: number; 월세: number; 합계: number } }> {
     const result = {};
     for (const 계약종료월 of months) {
-      const 전세데이터 = await this.getDetachedHouseRentData(
+      const 전세데이터 = await this.getHouseDongData(
         houseType,
         location,
         계약종료월,
         '전세', // 전세 데이터 가져오기
       );
-      const 월세데이터 = await this.getDetachedHouseRentData(
+      const 월세데이터 = await this.getHouseDongData(
         houseType,
         location,
         계약종료월,
@@ -83,6 +107,41 @@ export class AppService {
     return result;
   }
 
+  async getPredictedAmountByHouse(
+    houseType: string,
+    houseName: string,
+    months: Array<number>,
+  ) {
+    const result = { 합계: 0, 전세: 0, 월세: 0 };
+    for (const 계약종료월 of months) {
+      const 전세데이터 = await this.getHouseDetailData(
+        houseType,
+        houseName,
+        계약종료월,
+        '전세', // 전세 데이터 가져오기
+      );
+      const 월세데이터 = await this.getHouseDetailData(
+        houseType,
+        houseName,
+        계약종료월,
+        '월세', // 월세 데이터 가져오기
+      );
+
+      // 각각의 데이터를 처리하여 result 객체에 추가
+      전세데이터.forEach(() => {
+        result.전세 += 1;
+        result.합계 += 1;
+      });
+
+      월세데이터.forEach(() => {
+        result.월세 += 1;
+        result.합계 += 1;
+      });
+    }
+
+    return result;
+  }
+
   async getPredictedAmountByArea(location: string, months: Array<number>) {
     const result = {
       전세: { '40㎡ 미만': 0, '40-85㎡': 0, '85㎡ 이상': 0 },
@@ -92,13 +151,13 @@ export class AppService {
     const bins = [40, 85, 300];
     const labels = ['40㎡ 미만', '40-85㎡', '85㎡ 이상'];
     for (const 계약종료월 of months) {
-      const 전세데이터 = await this.getDetachedHouseRentData(
+      const 전세데이터 = await this.getHouseDongData(
         '단독다가구',
         location,
         계약종료월,
         '전세', // 전세 데이터 가져오기
       );
-      const 월세데이터 = await this.getDetachedHouseRentData(
+      const 월세데이터 = await this.getHouseDongData(
         '단독다가구',
         location,
         계약종료월,
@@ -138,13 +197,13 @@ export class AppService {
     const labels = ['10년 미만', '10-20년', '20-30년', '30년 이상'];
 
     for (const 계약종료월 of months) {
-      const 전세데이터 = await this.getDetachedHouseRentData(
+      const 전세데이터 = await this.getHouseDongData(
         '단독다가구',
         location,
         계약종료월,
         '전세', // 전세 데이터 가져오기
       );
-      const 월세데이터 = await this.getDetachedHouseRentData(
+      const 월세데이터 = await this.getHouseDongData(
         '단독다가구',
         location,
         계약종료월,

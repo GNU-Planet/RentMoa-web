@@ -39,12 +39,17 @@ const drawHousePredictionData = (
   });
 
   // 집 면적별 예측물량 그리기
+  const areaContainers = infoContainer.querySelectorAll('.area-box');
+  areaContainers.forEach((areaContainer) => {
+    areaContainer.remove();
+  });
   Object.keys(houseAreaData).forEach((area) => {
     const areaContainer = document.createElement('div');
     areaContainer.classList.add('info-box');
+    areaContainer.classList.add('area-box');
     const areaTitle = document.createElement('p');
     areaTitle.classList.add('big-title');
-    areaTitle.textContent = `${area}평`;
+    areaTitle.textContent = `${Math.floor(area / 3.3)}평`;
     areaContainer.appendChild(areaTitle);
     infoContainer.appendChild(areaContainer);
     if (houseAreaData[area].length > 0) {

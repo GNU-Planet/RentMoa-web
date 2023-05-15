@@ -184,6 +184,7 @@ export class AppService {
           keyword: `%${houseName}%`,
         })
         .andWhere(`TRUNCATE(${selectedTable}.전용면적, 0) = :area`, { area })
+        .andWhere(`${selectedTable}.계약종료년 = :year`, { year })
         .andWhere(`${selectedTable}.계약종료월 IN (:...months)`, { months })
         .limit(5)
         .getRawMany();

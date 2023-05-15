@@ -61,6 +61,24 @@ export class AppController {
     return { result };
   }
 
+  // 아파트&오피스텔 면적별 예측
+  @Post('/house-area')
+  async getPredictedAmountByHouseArea(
+    @Body('houseType') houseType: string,
+    @Body('houseName') houseName: string,
+    @Body('area') area: number,
+    @Body('months') months: Array<number>,
+  ) {
+    const result = await this.appService.getPredictedAmountByHouseArea(
+      houseType,
+      houseName,
+      area,
+      months,
+    );
+
+    return { result };
+  }
+
   // 단독다가구 주택유형별 예측
   @Post('/type-area')
   async getPredictedAmountByArea(

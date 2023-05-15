@@ -142,6 +142,57 @@ export class AppService {
     return result;
   }
 
+  async getPredictedAmountByHouseArea(
+    houseType: string,
+    houseName: string,
+    area: number,
+    months: Array<number>,
+  ) {
+    let areasArray;
+    let results = {};
+    let selectedRepository, selectedTable;
+    if (houseType == '아파트') {
+    } else if (houseType == '오피스텔') {
+      selectedRepository = this.offiRentRepository;
+      selectedTable = 'offiRent';
+    }
+
+    if (!area) {
+      const areas = await selectedRepository
+        .createQueryBuilder(selectedTable)
+        .select(`TRUNCATE(${selectedTable}.전용면적, 0)`, '전용면적')
+        .distinct(true)
+        .where(`${selectedTable}.단지 LIKE :keyword`, {
+          keyword: `%${houseName}%`,
+        })
+        .orderBy('전용면적', 'ASC')
+        .getRawMany();
+      areasArray = areas.map((areas) => areas.전용면적);
+    } else {
+      areasArray = [area];
+    }
+
+    for (const area of areasArray) {
+      const contracts = await selectedRepository
+        .createQueryBuilder(selectedTable)
+        .select(
+          `CONCAT(RIGHT(${selectedTable}.년, 2), '.', LPAD(${selectedTable}.월, 2, '0'), '.', LPAD(${selectedTable}.일, 2, '0')) AS 날짜,
+          CONCAT(${selectedTable}.보증금액, '/', ${selectedTable}.월세금액) AS 금액, 
+          층`,
+        )
+        .where(`${selectedTable}.단지 LIKE :keyword`, {
+          keyword: `%${houseName}%`,
+        })
+        .andWhere(`TRUNCATE(${selectedTable}.전용면적, 0) = :area`, { area })
+        .andWhere(`${selectedTable}.계약종료월 IN (:...months)`, { months })
+        .limit(5)
+        .getRawMany();
+      results[area] = contracts;
+    }
+
+    return results;
+  }
+
   async getPredictedAmountByArea(location: string, months: Array<number>) {
     const result = {
       전세: { '40㎡ 미만': 0, '40-85㎡': 0, '85㎡ 이상': 0 },

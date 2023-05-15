@@ -3,7 +3,12 @@ const filterBtns = document.querySelectorAll('.filterBtn');
 const detachedContainer = document.querySelector('.detached-container');
 let infoContainer;
 
-const drawHousePredictionData = (houseName, houseAddress, houseData) => {
+const drawHousePredictionData = (
+  houseName,
+  houseAddress,
+  houseData,
+  houseAreaData,
+) => {
   if (infoContainer) infoContainer.classList.add('except-content');
   infoContainer = document.querySelector('.house-container');
   const closeBtn = infoContainer.querySelector('.close_btn');
@@ -31,6 +36,42 @@ const drawHousePredictionData = (houseName, houseAddress, houseData) => {
   preTypes.forEach((count, index) => {
     const text = count.querySelector('.text');
     text.textContent = `${Object.values(houseData)[index]}호`;
+  });
+
+  // 집 면적별 예측물량 그리기
+  Object.keys(houseAreaData).forEach((area) => {
+    const areaContainer = document.createElement('div');
+    areaContainer.classList.add('info-box');
+    const areaTitle = document.createElement('p');
+    areaTitle.classList.add('big-title');
+    areaTitle.textContent = `${area}평`;
+    areaContainer.appendChild(areaTitle);
+    infoContainer.appendChild(areaContainer);
+    if (houseAreaData[area].length > 0) {
+      const table = document.createElement('table');
+      table.classList.add('info-table');
+      areaContainer.appendChild(table);
+
+      const headers = ['계약일', '가격', '동/층'];
+      const tr = document.createElement('tr');
+      table.appendChild(tr);
+
+      headers.forEach((headerText) => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        tr.appendChild(th);
+      });
+      areaContainer.appendChild(table);
+      houseAreaData[area].forEach((contractData) => {
+        const tr = document.createElement('tr');
+        table.appendChild(tr);
+        Object.values(contractData).forEach((value) => {
+          const td = document.createElement('td');
+          td.textContent = value;
+          tr.appendChild(td);
+        });
+      });
+    }
   });
 };
 

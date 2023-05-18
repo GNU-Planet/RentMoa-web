@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DetachedHouseRent, OffiRent } from './entity/app.entity';
 import { join } from 'path';
+import { ApartmentsModule } from './apartments/apartments.module';
+import { DetachedModule } from './detached/detached.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { join } from 'path';
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([DetachedHouseRent, OffiRent]),
+    ApartmentsModule,
+    DetachedModule,
   ],
   controllers: [AppController],
   providers: [AppService],

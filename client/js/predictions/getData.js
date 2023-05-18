@@ -41,8 +41,8 @@ const getHousePredictionData = async (infoWindow) => {
       houseName: houseDBName,
       months,
     };
-    const houseData = await requestData(body, '/house');
-    const houseAreaData = await requestData(body, '/house-area');
+    const houseData = await requestData(body, '/apartments/house');
+    const houseAreaData = await requestData(body, '/apartments/house-area');
     drawHousePredictionData(
       houseShowName,
       houseAddress,
@@ -67,8 +67,8 @@ const getDetachedHousePredictionData = async (btn) => {
       location: dongTitle,
       months,
     };
-    const builtYearData = await requestData(body, '/built-year');
-    const typeAreaData = await requestData(body, '/type-area');
+    const builtYearData = await requestData(body, '/detached/built-year');
+    const typeAreaData = await requestData(body, '/detached/type-area');
     drawDongPredictionData(dongTitle, builtYearData, typeAreaData);
   } catch (err) {
     console.log(err);

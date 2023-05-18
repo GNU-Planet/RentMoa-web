@@ -44,38 +44,4 @@ export class AppController {
     );
     return { result };
   }
-
-  // 아파트&오피스텔 예측 요약
-  @Post('/house')
-  async getPredictedAmountByHouse(
-    @Body('houseType') houseType: string,
-    @Body('houseName') houseName: string,
-    @Body('months') months: Array<number>,
-  ) {
-    const result = await this.appService.getPredictedAmountByHouse(
-      houseType,
-      houseName,
-      months,
-    );
-
-    return { result };
-  }
-
-  // 아파트&오피스텔 면적별 예측
-  @Post('/house-area')
-  async getPredictedAmountByHouseArea(
-    @Body('houseType') houseType: string,
-    @Body('houseName') houseName: string,
-    @Body('area') area: number,
-    @Body('months') months: Array<number>,
-  ) {
-    const result = await this.appService.getPredictedAmountByHouseArea(
-      houseType,
-      houseName,
-      area,
-      months,
-    );
-
-    return { result };
-  }
 }

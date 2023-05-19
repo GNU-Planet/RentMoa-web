@@ -43,7 +43,7 @@ export class ApartmentsService {
       where: {
         계약종료년: 2023,
         계약종료월: month,
-        단지ID: houseIdx,
+        ComplexID: houseIdx,
       },
     };
     if (charterRent == '월세') {
@@ -51,6 +51,7 @@ export class ApartmentsService {
     } else if (charterRent == '전세') {
       options.where['월세금액'] = Equal(0);
     }
+    console.log(options);
     return await this.offiRentRepository.find(options);
   }
 
@@ -110,7 +111,7 @@ export class ApartmentsService {
             CONCAT(${selectedTable}.보증금액, '/', ${selectedTable}.월세금액) AS 금액, 
             층`,
         )
-        .where(`${selectedTable}.단지ID LIKE :keyword`, {
+        .where(`${selectedTable}.ComplexID LIKE :keyword`, {
           keyword: `%${houseIdx}%`,
         })
         .andWhere(`TRUNCATE(${selectedTable}.전용면적, 0) = :area`, { area })

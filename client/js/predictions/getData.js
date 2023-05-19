@@ -23,12 +23,9 @@ const getHousePredictionData = async (infoWindow) => {
   const tempElement = document.createElement('div');
   tempElement.innerHTML = infoWindow;
 
-  const houseShowName = tempElement.querySelector(
-    '.house-info-window_name',
-  ).textContent;
-
-  let houseDBName = tempElement.querySelector('.house-info-window_name');
-  houseDBName = houseDBName.getAttribute('data-house');
+  const houseIdx = tempElement
+    .querySelector('.house-info-window_name')
+    .getAttribute('house-id');
 
   // Retrieve the content of the element with class house-info-window_address
   const houseAddress = tempElement.querySelector(
@@ -38,7 +35,7 @@ const getHousePredictionData = async (infoWindow) => {
   try {
     const body = {
       houseType,
-      houseName: houseDBName,
+      houseIdx,
       months,
     };
     const houseData = await requestData(body, '/apartments/house');

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OffiRent, OffiInfo } from './entity/apartments.entity';
 import { Equal, FindManyOptions, Not, Repository } from 'typeorm';
@@ -25,15 +25,25 @@ export class ApartmentsService {
 
   async getHouseDetailData(
     houseType: string,
-    houseName: string,
+    houseIdx: number,
     month: number,
     charterRent: string,
   ) {
+    /*
+    // HouseInfo 테이블에서 houseName에 해당하는 단지명 조회
+    const houseInfo = await this.offiInfoRepository.findOne({
+      where: { ComplexName: houseName },
+    });
+    if (!houseInfo) {
+      // 단지명에 해당하는 정보가 없는 경우 처리
+      throw new NotFoundException('단지명을 찾을 수 없습니다.');
+    }*/
+
     const options: FindManyOptions = {
       where: {
         계약종료년: 2023,
         계약종료월: month,
-        단지: houseName,
+        단지ID: houseIdx,
       },
     };
     if (charterRent == '월세') {
@@ -46,20 +56,20 @@ export class ApartmentsService {
 
   async getPredictedAmountByHouse(
     houseType: string,
-    houseName: string,
+    houseIdx: number,
     months: Array<number>,
   ) {
     const result = { 합계: 0, 전세: 0, 월세: 0 };
     for (const 계약종료월 of months) {
       const 전세데이터 = await this.getHouseDetailData(
         houseType,
-        houseName,
+        houseIdx,
         계약종료월,
         '전세', // 전세 데이터 가져오기
       );
       const 월세데이터 = await this.getHouseDetailData(
         houseType,
-        houseName,
+        houseIdx,
         계약종료월,
         '월세', // 월세 데이터 가져오기
       );
@@ -81,11 +91,10 @@ export class ApartmentsService {
 
   async getPredictedAmountByHouseArea(
     houseType: string,
-    houseName: string,
+    houseIdx: number,
     area: number,
     months: Array<number>,
   ) {
-    let areasArray;
     let results = {};
     let selectedRepository, selectedTable;
     if (houseType == '아파트') {
@@ -93,32 +102,16 @@ export class ApartmentsService {
       selectedRepository = this.offiRentRepository;
       selectedTable = 'offiRent';
     }
-
-    if (!area) {
-      const areas = await selectedRepository
-        .createQueryBuilder(selectedTable)
-        .select(`TRUNCATE(${selectedTable}.전용면적, 0)`, '전용면적')
-        .distinct(true)
-        .where(`${selectedTable}.단지 LIKE :keyword`, {
-          keyword: `%${houseName}%`,
-        })
-        .orderBy('전용면적', 'ASC')
-        .getRawMany();
-      areasArray = areas.map((areas) => areas.전용면적);
-    } else {
-      areasArray = [area];
-    }
-
-    for (const area of areasArray) {
+    try {
       const contracts = await selectedRepository
         .createQueryBuilder(selectedTable)
         .select(
           `CONCAT(RIGHT(${selectedTable}.년, 2), '.', LPAD(${selectedTable}.월, 2, '0'), '.', LPAD(${selectedTable}.일, 2, '0')) AS 날짜,
-          CONCAT(${selectedTable}.보증금액, '/', ${selectedTable}.월세금액) AS 금액, 
-          층`,
+            CONCAT(${selectedTable}.보증금액, '/', ${selectedTable}.월세금액) AS 금액, 
+            층`,
         )
-        .where(`${selectedTable}.단지 LIKE :keyword`, {
-          keyword: `%${houseName}%`,
+        .where(`${selectedTable}.단지ID LIKE :keyword`, {
+          keyword: `%${houseIdx}%`,
         })
         .andWhere(`TRUNCATE(${selectedTable}.전용면적, 0) = :area`, { area })
         .andWhere(`${selectedTable}.계약종료년 = :year`, { year: 2023 })
@@ -126,6 +119,8 @@ export class ApartmentsService {
         .limit(5)
         .getRawMany();
       results[area] = contracts;
+    } catch (err) {
+      console.log('err here');
     }
 
     return results;

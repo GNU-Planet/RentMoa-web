@@ -17,10 +17,10 @@ block scripts
     const API_KEY = !{JSON.stringify(API_KEY)};
   script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${API_KEY}&libraries=services,clusterer,drawing`)
   script(src="/client/js/global.js")
+  script(src="/client/js/predictions/getData.js")
   script(src="/client/js/mapInit.js")
   script(src="/client/js/houseTypes/houseTypeFilter.js")
   script(src="/client/js/predictions/monthFilter.js")
   script(src="/client/js/predictions/hightcharts.js")
   script(src="/client/js/predictions/drawData.js")
-  script(src="/client/js/predictions/getData.js")
   script(src="/client/js/api.js")

@@ -25,26 +25,27 @@ export class Rent {
 
   @Column()
   월세금액: number;
-
-  @Column()
-  건축년도: number;
 }
 
 @Entity({ name: 'OffiRent' })
 export class OffiRent extends Rent {
-  @Column()
-  층: number;
+  @Column({ name: '단지ID' })
+  단지ID: number;
 
   @Column()
-  단지: string;
+  층: number;
 
   @Column()
   전용면적: number;
 }
 
+@Entity({ name: 'OffiInfo' })
 export class HouseInfo {
   @PrimaryGeneratedColumn({ name: 'ComplexID' })
   ComplexID: number;
+
+  @Column({ name: 'Province' })
+  Province: string;
 
   @Column({ name: 'CityDistrict' })
   CityDistrict: string;

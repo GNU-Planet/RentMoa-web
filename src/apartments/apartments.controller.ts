@@ -17,12 +17,12 @@ export class ApartmentsController {
   @Post('/house')
   async getPredictedAmountByHouse(
     @Body('houseType') houseType: string,
-    @Body('houseName') houseName: string,
+    @Body('houseIdx') houseIdx: number,
     @Body('months') months: Array<number>,
   ) {
     const result = await this.apartmentsService.getPredictedAmountByHouse(
       houseType,
-      houseName,
+      houseIdx,
       months,
     );
 
@@ -33,13 +33,13 @@ export class ApartmentsController {
   @Post('/house-area')
   async getPredictedAmountByHouseArea(
     @Body('houseType') houseType: string,
-    @Body('houseName') houseName: string,
+    @Body('houseIdx') houseIdx: number,
     @Body('area') area: number,
     @Body('months') months: Array<number>,
   ) {
     const result = await this.apartmentsService.getPredictedAmountByHouseArea(
       houseType,
-      houseName,
+      houseIdx,
       area,
       months,
     );

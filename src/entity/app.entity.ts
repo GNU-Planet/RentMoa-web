@@ -25,9 +25,6 @@ export class Rent {
 
   @Column()
   월세금액: number;
-
-  @Column()
-  건축년도: number;
 }
 
 @Entity({ name: 'DetachedHouseRent' })
@@ -40,9 +37,6 @@ export class DetachedHouseRent extends Rent {
 export class OffiRent extends Rent {
   @Column()
   층: number;
-
-  @Column()
-  단지: string;
 
   @Column()
   전용면적: number;

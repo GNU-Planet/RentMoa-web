@@ -75,20 +75,18 @@ dongGeoJsonData.then((data) => {
   updateDongMarkers(dongMarkers, result);
 });
 
-const offiGeoJsonData = fetch('client/json/Jinju_offi_centerLocation.json')
-  .then((response) => response.json())
-  .then((data) => {
-    return data;
-  });
+const offiGeoJsonData = requestData({}, '/apartments/location');
 
 offiGeoJsonData.then((data) => {
+  data = data.result;
   offiMarkers = data.map((data) => {
+    data = Object.values(data);
     var markerImage = new kakao.maps.MarkerImage(
       'client/houseIcon.png',
       new kakao.maps.Size(50, 50),
       { offset: new kakao.maps.Point(15, 30) },
     );
-    const position = new kakao.maps.LatLng(data.lat, data.lng);
+    const position = new kakao.maps.LatLng(data[6], data[7]);
     // 마커를 생성합니다
     const customOverlay = new kakao.maps.Marker({
       map: null,
@@ -97,8 +95,8 @@ offiGeoJsonData.then((data) => {
     });
     const houseInfoWindow = new kakao.maps.InfoWindow({
       content: `
-      <div class="house-info-window_name" data-house="${data.db_name}"> ${data.show_name}</div>
-      <div class="house-info-window_address"> ${data.do} ${data.si} ${data.dong} ${data.zibun}</div>
+      <div class="house-info-window_name" house-id="${data[0]}"> ${data[5]}</div>
+      <div class="house-info-window_address"> ${data[1]} ${data[2]} ${data[3]} ${data[4]}</div>
       `,
     });
 

@@ -9,7 +9,6 @@ const drawHousePredictionData = (
   houseData,
   houseAreaData,
 ) => {
-  console.log(houseAreaData);
   if (infoContainer) infoContainer.classList.add('except-content');
   infoContainer = document.querySelector('.house-container');
   const closeBtn = infoContainer.querySelector('.close_btn');

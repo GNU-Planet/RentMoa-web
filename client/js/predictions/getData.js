@@ -27,6 +27,10 @@ const getHousePredictionData = async (infoWindow) => {
     .querySelector('.house-info-window_name')
     .getAttribute('house-id');
 
+  const houseName = tempElement.querySelector(
+    '.house-info-window_name',
+  ).textContent;
+
   // Retrieve the content of the element with class house-info-window_address
   const houseAddress = tempElement.querySelector(
     '.house-info-window_address',
@@ -40,12 +44,7 @@ const getHousePredictionData = async (infoWindow) => {
     };
     const houseData = await requestData(body, '/apartments/house');
     const houseAreaData = await requestData(body, '/apartments/house-area');
-    drawHousePredictionData(
-      houseShowName,
-      houseAddress,
-      houseData,
-      houseAreaData,
-    );
+    drawHousePredictionData(houseName, houseAddress, houseData, houseAreaData);
   } catch (err) {
     console.log(err);
   }

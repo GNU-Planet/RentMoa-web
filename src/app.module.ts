@@ -15,7 +15,7 @@ import { DetachedModule } from './detached/detached.module';
       serveRoot: '/client',
       rootPath: join(__dirname, '..', 'client'), // <-- path to the static files
     }),
-    ConfigModule.forRoot({ envFilePath: '.env.dev' }), // Environment variables
+    ConfigModule.forRoot({ envFilePath: '.env.dev', isGlobal: true }), // Environment variables
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({

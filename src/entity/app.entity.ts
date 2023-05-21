@@ -35,6 +35,9 @@ export class DetachedHouseRent extends Rent {
 
 @Entity({ name: 'OffiRent' })
 export class OffiRent extends Rent {
+  @Column({ name: 'ComplexID' })
+  ComplexID: number;
+
   @Column()
   층: number;
 

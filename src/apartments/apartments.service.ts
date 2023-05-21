@@ -29,16 +29,6 @@ export class ApartmentsService {
     month: number,
     charterRent: string,
   ) {
-    /*
-    // HouseInfo 테이블에서 houseName에 해당하는 단지명 조회
-    const houseInfo = await this.offiInfoRepository.findOne({
-      where: { ComplexName: houseName },
-    });
-    if (!houseInfo) {
-      // 단지명에 해당하는 정보가 없는 경우 처리
-      throw new NotFoundException('단지명을 찾을 수 없습니다.');
-    }*/
-
     const options: FindManyOptions = {
       where: {
         계약종료년: 2023,
@@ -51,7 +41,6 @@ export class ApartmentsService {
     } else if (charterRent == '전세') {
       options.where['월세금액'] = Equal(0);
     }
-    console.log(options);
     return await this.offiRentRepository.find(options);
   }
 
@@ -97,13 +86,29 @@ export class ApartmentsService {
     months: Array<number>,
   ) {
     let results = {};
+    let areasArray;
     let selectedRepository, selectedTable;
     if (houseType == '아파트') {
     } else if (houseType == '오피스텔') {
       selectedRepository = this.offiRentRepository;
       selectedTable = 'offiRent';
     }
-    try {
+    if (!area) {
+      const areas = await selectedRepository
+        .createQueryBuilder(selectedTable)
+        .select(`TRUNCATE(${selectedTable}.전용면적, 0)`, '전용면적')
+        .distinct(true)
+        .where(`${selectedTable}.ComplexID LIKE :keyword`, {
+          keyword: `${houseIdx}`,
+        })
+        .orderBy('전용면적', 'ASC')
+        .getRawMany();
+      areasArray = areas.map((areas) => areas.전용면적);
+    } else {
+      areasArray = [area];
+    }
+
+    for (const area of areasArray) {
       const contracts = await selectedRepository
         .createQueryBuilder(selectedTable)
         .select(
@@ -112,7 +117,7 @@ export class ApartmentsService {
             층`,
         )
         .where(`${selectedTable}.ComplexID LIKE :keyword`, {
-          keyword: `%${houseIdx}%`,
+          keyword: `${houseIdx}`,
         })
         .andWhere(`TRUNCATE(${selectedTable}.전용면적, 0) = :area`, { area })
         .andWhere(`${selectedTable}.계약종료년 = :year`, { year: 2023 })
@@ -120,10 +125,7 @@ export class ApartmentsService {
         .limit(5)
         .getRawMany();
       results[area] = contracts;
-    } catch (err) {
-      console.log('err here');
     }
-
     return results;
   }
 }

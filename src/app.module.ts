@@ -4,7 +4,11 @@ import { AppService } from './app.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DetachedHouseRent, OffiRent } from './entity/app.entity';
+import {
+  AdministrativeDivisionInfo,
+  DetachedHouseRent,
+  ApartmentRent,
+} from './entity/app.entity';
 import { join } from 'path';
 import { ApartmentsModule } from './apartments/apartments.module';
 import { DetachedModule } from './detached/detached.module';
@@ -31,7 +35,11 @@ import { DetachedModule } from './detached/detached.module';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([DetachedHouseRent, OffiRent]),
+    TypeOrmModule.forFeature([
+      AdministrativeDivisionInfo,
+      DetachedHouseRent,
+      ApartmentRent,
+    ]),
     ApartmentsModule,
     DetachedModule,
   ],

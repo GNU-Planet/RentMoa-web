@@ -17,7 +17,7 @@ const addHouseTypeBtnClickEventListener = () => {
         months,
       };
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', `/dong`);
+      xhr.open('POST', `/dong-count`);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify(data));
       xhr.onreadystatechange = function () {

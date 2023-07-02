@@ -28,7 +28,13 @@ export class AppController {
     return { API_KEY, result };
   }
 
-  @Post('/dong')
+  @Post('/dong-list')
+  async getDongList() {
+    const result = await this.appService.getDongList();
+    return { result };
+  }
+
+  @Post('/dong-count')
   async getPredictedAmountByDong(
     @Body('houseType') houseType: string,
     @Body('location') location: string,

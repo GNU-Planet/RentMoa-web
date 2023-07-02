@@ -49,19 +49,18 @@ var options = {
 
 var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
-const dongGeoJsonData = fetch('client/json/Jinju_dong_centerLocation.json')
-  .then((response) => response.json())
-  .then((data) => {
-    return data;
-  });
+const dongGeoJsonData = requestData({}, '/dong-list');
 
 dongGeoJsonData.then((data) => {
   dongMarkers = data.map((location) => {
-    const content = `<div class="dong-box" data-lat=${location.lat} data-lng=${location.lng}>
+    const content = `<div class="dong-box" data-lat=${location.dong_lat} data-lng=${location.dong_lng}>
                       <p class="dong-title">${location.dong}</p>
                       <p class="dong-count"></p>
                     </div>`;
-    const position = new kakao.maps.LatLng(location.lat, location.lng);
+    const position = new kakao.maps.LatLng(
+      location.dong_lat,
+      location.dong_lng,
+    );
     const customOverlay = new kakao.maps.CustomOverlay({
       map: map,
       position: position,
@@ -75,6 +74,7 @@ dongGeoJsonData.then((data) => {
   updateDongMarkers(dongMarkers, result);
 });
 
+/*
 const offiGeoJsonData = requestData({}, '/apartments/location');
 
 offiGeoJsonData.then((data) => {
@@ -120,6 +120,7 @@ offiGeoJsonData.then((data) => {
     return customOverlay;
   });
 });
+*/
 
 // 맵 스크롤 이벤트 핸들러
 kakao.maps.event.addListener(map, 'dragend', function () {
@@ -127,6 +128,7 @@ kakao.maps.event.addListener(map, 'dragend', function () {
   addDongBtnClickEventListener();
 });
 
+/*
 // 확대 레벨 변경 이벤트 핸들러
 kakao.maps.event.addListener(map, 'zoom_changed', function () {
   var currentZoomLevel = map.getLevel(); // 현재 확대 레벨 확인
@@ -149,3 +151,4 @@ kakao.maps.event.addListener(map, 'zoom_changed', function () {
 
   drawNoCount();
 });
+*/

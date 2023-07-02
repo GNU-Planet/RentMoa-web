@@ -24,7 +24,7 @@ import { DetachedModule } from './detached/detached.module';
         port: 3306,
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
-        database: 'richJinju',
+        database: 'gnu_planet',
         entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: false,
         autoLoadEntities: true,

@@ -74,19 +74,19 @@ dongGeoJsonData.then((data) => {
   updateDongMarkers(dongMarkers, result);
 });
 
-/*
 const offiGeoJsonData = requestData({}, '/apartments/location');
 
 offiGeoJsonData.then((data) => {
-  data = data.result;
   offiMarkers = data.map((data) => {
-    data = Object.values(data);
     var markerImage = new kakao.maps.MarkerImage(
       'client/houseIcon.png',
       new kakao.maps.Size(50, 50),
       { offset: new kakao.maps.Point(15, 30) },
     );
-    const position = new kakao.maps.LatLng(data[6], data[7]);
+    const position = new kakao.maps.LatLng(
+      data.building_lat,
+      data.building_lng,
+    );
     // 마커를 생성합니다
     const customOverlay = new kakao.maps.Marker({
       map: null,
@@ -95,8 +95,8 @@ offiGeoJsonData.then((data) => {
     });
     const houseInfoWindow = new kakao.maps.InfoWindow({
       content: `
-      <div class="house-info-window_name" house-id="${data[0]}"> ${data[5]}</div>
-      <div class="house-info-window_address"> ${data[1]} ${data[2]} ${data[3]} ${data[4]}</div>
+      <div class="house-info-window_name" house-id="${data.id}"> ${data.building_name}</div>
+      <div class="house-info-window_address"> ${data.dong}</div>
       `,
     });
 
@@ -120,7 +120,6 @@ offiGeoJsonData.then((data) => {
     return customOverlay;
   });
 });
-*/
 
 // 맵 스크롤 이벤트 핸들러
 kakao.maps.event.addListener(map, 'dragend', function () {
@@ -128,7 +127,6 @@ kakao.maps.event.addListener(map, 'dragend', function () {
   addDongBtnClickEventListener();
 });
 
-/*
 // 확대 레벨 변경 이벤트 핸들러
 kakao.maps.event.addListener(map, 'zoom_changed', function () {
   var currentZoomLevel = map.getLevel(); // 현재 확대 레벨 확인
@@ -151,4 +149,3 @@ kakao.maps.event.addListener(map, 'zoom_changed', function () {
 
   drawNoCount();
 });
-*/

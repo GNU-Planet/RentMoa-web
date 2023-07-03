@@ -15,6 +15,27 @@ export class AdministrativeDivisionInfo {
   dong_lng: number; // 법정동 경도
 }
 
+@Entity({ name: 'apartment_info' })
+export class ApartmentInfo {
+  @PrimaryGeneratedColumn()
+  id: number; // id
+
+  @Column()
+  dong: string; // 법정동
+
+  @Column()
+  building_name: string; // 건물명
+
+  @Column()
+  build_year: number; // 건축년도
+
+  @Column('double')
+  building_lat: number; // 건물 위도
+
+  @Column('double')
+  building_lng: number; // 건물 경도
+}
+
 @Entity({ name: 'detached_house_contract' })
 export class DetachedHouseRent {
   @PrimaryGeneratedColumn()

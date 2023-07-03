@@ -1,26 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OffiRent, OffiInfo } from './entity/apartments.entity';
+import { ApartmentInfo, ApartmentRent } from '../entity/app.entity';
 import { Equal, FindManyOptions, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class ApartmentsService {
   constructor(
-    @InjectRepository(OffiRent)
-    private readonly offiRentRepository: Repository<OffiRent>,
-    @InjectRepository(OffiInfo)
-    private readonly offiInfoRepository: Repository<OffiInfo>,
+    @InjectRepository(ApartmentRent)
+    private readonly ApartmentRentRepository: Repository<ApartmentRent>,
+    @InjectRepository(ApartmentInfo)
+    private readonly ApartmentInfoRepository: Repository<ApartmentInfo>,
   ) {
-    this.offiRentRepository = offiRentRepository;
-    this.offiInfoRepository = offiInfoRepository;
+    this.ApartmentRentRepository = ApartmentRentRepository;
+    this.ApartmentInfoRepository = ApartmentInfoRepository;
   }
 
-  async getApartmentsLocations(houseType: string) {
-    const result = await this.offiInfoRepository
-      .createQueryBuilder('offiRent')
-      .getRawMany();
-
-    return { result };
+  async getApartmentsLocations(houseType: string): Promise<any> {
+    const result = await this.ApartmentInfoRepository.find();
+    return result;
   }
 
   async getHouseDetailData(
@@ -41,7 +38,7 @@ export class ApartmentsService {
     } else if (charterRent == '전세') {
       options.where['월세금액'] = Equal(0);
     }
-    return await this.offiRentRepository.find(options);
+    return await this.ApartmentRentRepository.find(options);
   }
 
   async getPredictedAmountByHouse(
@@ -90,8 +87,8 @@ export class ApartmentsService {
     let selectedRepository, selectedTable;
     if (houseType == '아파트') {
     } else if (houseType == '오피스텔') {
-      selectedRepository = this.offiRentRepository;
-      selectedTable = 'offiRent';
+      selectedRepository = this.ApartmentRentRepository;
+      selectedTable = 'ApartmentRent';
     }
     if (!area) {
       const areas = await selectedRepository

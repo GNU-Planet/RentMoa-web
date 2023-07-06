@@ -74,7 +74,10 @@ dongGeoJsonData.then((data) => {
   updateDongMarkers(dongMarkers, result);
 });
 
-const offiGeoJsonData = requestData({}, '/apartments/location');
+const offiGeoJsonData = requestData(
+  { houseType: '오피스텔' },
+  '/apartments/location',
+);
 
 offiGeoJsonData.then((data) => {
   offiMarkers = data.map((data) => {

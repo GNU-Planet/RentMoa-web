@@ -1,22 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ApartmentInfo, ApartmentRent } from '../entity/app.entity';
-import { Equal, FindManyOptions, Not, Repository } from 'typeorm';
+import {
+  ApartmentInfo,
+  ApartmentRent,
+  OffiRent,
+  OffiInfo,
+} from '../entity/app.entity';
+import { Equal, FindManyOptions, In, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class ApartmentsService {
   constructor(
     @InjectRepository(ApartmentRent)
-    private readonly ApartmentRentRepository: Repository<ApartmentRent>,
+    private readonly apartmentRentRepository: Repository<ApartmentRent>,
     @InjectRepository(ApartmentInfo)
-    private readonly ApartmentInfoRepository: Repository<ApartmentInfo>,
+    private readonly apartmentInfoRepository: Repository<ApartmentInfo>,
+    @InjectRepository(OffiInfo)
+    private readonly offiInfoRepository: Repository<OffiInfo>,
+    @InjectRepository(OffiRent)
+    private readonly offiRentRepository: Repository<OffiRent>,
   ) {
-    this.ApartmentRentRepository = ApartmentRentRepository;
-    this.ApartmentInfoRepository = ApartmentInfoRepository;
+    this.apartmentRentRepository = apartmentRentRepository;
+    this.apartmentInfoRepository = apartmentInfoRepository;
+    this.offiRentRepository = offiRentRepository;
+    this.offiInfoRepository = offiInfoRepository;
   }
 
   async getApartmentsLocations(houseType: string): Promise<any> {
-    const result = await this.ApartmentInfoRepository.find();
+    let result;
+    if (houseType === '아파트') {
+      result = await this.apartmentInfoRepository.find();
+    } else if (houseType === '오피스텔') {
+      result = await this.offiInfoRepository.find();
+    }
     return result;
   }
 
@@ -38,7 +54,10 @@ export class ApartmentsService {
     } else if (charterRent == '전세') {
       options.where['월세금액'] = Equal(0);
     }
-    return await this.ApartmentRentRepository.find(options);
+    if (houseType == '아파트')
+      return await this.apartmentRentRepository.find(options);
+    else if (houseType == '오피스텔')
+      return await this.offiRentRepository.find(options);
   }
 
   async getPredictedAmountByHouse(
@@ -87,7 +106,7 @@ export class ApartmentsService {
     let selectedRepository, selectedTable;
     if (houseType == '아파트') {
     } else if (houseType == '오피스텔') {
-      selectedRepository = this.ApartmentRentRepository;
+      selectedRepository = this.apartmentRentRepository;
       selectedTable = 'ApartmentRent';
     }
     if (!area) {

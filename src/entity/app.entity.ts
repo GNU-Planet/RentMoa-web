@@ -15,8 +15,8 @@ export class AdministrativeDivisionInfo {
   dong_lng: number; // 법정동 경도
 }
 
-@Entity({ name: 'apartment_info' })
-export class ApartmentInfo {
+@Entity({ name: 'rent_info' })
+export class RentInfo {
   @PrimaryGeneratedColumn()
   id: number; // id
 
@@ -36,8 +36,14 @@ export class ApartmentInfo {
   building_lng: number; // 건물 경도
 }
 
-@Entity({ name: 'detached_house_contract' })
-export class DetachedHouseRent {
+@Entity({ name: 'apartment_info' })
+export class ApartmentInfo extends RentInfo {}
+
+@Entity({ name: 'offi_info' })
+export class OffiInfo extends RentInfo {}
+
+@Entity({ name: 'rent_contract' })
+export class RentContract {
   @PrimaryGeneratedColumn()
   id: number; // id
 
@@ -63,8 +69,17 @@ export class DetachedHouseRent {
   monthly_rent: number; // 월세
 }
 
+@Entity({ name: 'detached_house_contract' })
+export class DetachedHouseRent extends RentContract {}
+
 @Entity({ name: 'apartment_contract' })
-export class ApartmentRent extends DetachedHouseRent {
+export class ApartmentRent extends RentContract {
+  @Column()
+  floor: number; // 층
+}
+
+@Entity({ name: 'offi_contract' })
+export class OffiRent extends RentContract {
   @Column()
   floor: number; // 층
 }

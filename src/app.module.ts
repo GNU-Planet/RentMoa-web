@@ -8,6 +8,7 @@ import {
   AdministrativeDivisionInfo,
   DetachedHouseRent,
   ApartmentRent,
+  OffiRent,
 } from './entity/app.entity';
 import { join } from 'path';
 import { ApartmentsModule } from './apartments/apartments.module';
@@ -39,6 +40,7 @@ import { DetachedModule } from './detached/detached.module';
       AdministrativeDivisionInfo,
       DetachedHouseRent,
       ApartmentRent,
+      OffiRent,
     ]),
     ApartmentsModule,
     DetachedModule,

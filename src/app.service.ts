@@ -11,6 +11,7 @@ import {
 import {
   AdministrativeDivisionInfo,
   DetachedHouseRent,
+  OffiRent,
   ApartmentRent,
 } from './entity/app.entity';
 
@@ -24,12 +25,15 @@ export class AppService {
     @InjectRepository(DetachedHouseRent)
     private detachedHouseRentRepository: Repository<DetachedHouseRent>,
     @InjectRepository(ApartmentRent)
-    private ApartmentRentRepository: Repository<ApartmentRent>,
+    private apartmentRentRepository: Repository<ApartmentRent>,
+    @InjectRepository(OffiRent)
+    private offiRentRepository: Repository<OffiRent>,
   ) {
     this.administrativeDivisionInfoRepository =
       administrativeDivisionInfoRepository;
     this.detachedHouseRentRepository = detachedHouseRentRepository;
-    this.ApartmentRentRepository = ApartmentRentRepository;
+    this.apartmentRentRepository = apartmentRentRepository;
+    this.offiRentRepository = offiRentRepository;
   }
 
   async getDongList(): Promise<any> {
@@ -60,7 +64,7 @@ export class AppService {
     if (houseType == '단독다가구')
       return await this.detachedHouseRentRepository.find(options);
     else if (houseType == '오피스텔')
-      return await this.ApartmentRentRepository.find(options);
+      return await this.offiRentRepository.find(options);
   }
 
   async getPredictedAmountByDong(

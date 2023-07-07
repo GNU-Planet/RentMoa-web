@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity({ name: 'administrative_division_info' })
 export class AdministrativeDivisionInfo {
@@ -40,7 +47,11 @@ export class RentInfo {
 export class ApartmentInfo extends RentInfo {}
 
 @Entity({ name: 'offi_info' })
-export class OffiInfo extends RentInfo {}
+export class OffiInfo extends RentInfo {
+  // 다른 엔티티와의 관계 설정
+  @OneToMany(() => OffiRent, (contract) => contract.building)
+  contracts: OffiRent[];
+}
 
 @Entity({ name: 'rent_contract' })
 export class RentContract {
@@ -80,6 +91,14 @@ export class ApartmentRent extends RentContract {
 
 @Entity({ name: 'offi_contract' })
 export class OffiRent extends RentContract {
+  @Column()
+  building_id: number;
+
+  // 외래 키 관계 설정
+  @ManyToOne(() => OffiInfo, (info) => info.contracts)
+  @JoinColumn({ name: 'building_id' })
+  building: OffiInfo;
+
   @Column()
   floor: number; // 층
 }

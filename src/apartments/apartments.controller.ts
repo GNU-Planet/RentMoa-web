@@ -37,11 +37,12 @@ export class ApartmentsController {
     @Body('area') area: number,
     @Body('months') months: Array<number>,
   ) {
+    const month = months[0];
     const result = await this.apartmentsService.getPredictedAmountByHouseArea(
       houseType,
       houseIdx,
       area,
-      months,
+      month,
     );
 
     return { result };

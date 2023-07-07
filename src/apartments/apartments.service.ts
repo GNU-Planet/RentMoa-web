@@ -6,7 +6,9 @@ import {
   OffiRent,
   OffiInfo,
 } from '../entity/app.entity';
-import { Equal, FindManyOptions, In, Not, Repository } from 'typeorm';
+import { Between, Equal, FindManyOptions, In, Not, Repository } from 'typeorm';
+
+const year = 2023;
 
 @Injectable()
 export class ApartmentsService {
@@ -41,22 +43,22 @@ export class ApartmentsService {
     houseIdx: number,
     month: number,
     charterRent: string,
-  ) {
+  ): Promise<any> {
     const options: FindManyOptions = {
       where: {
-        계약종료년: 2023,
-        계약종료월: month,
-        ComplexID: houseIdx,
+        contract_end_date: Between(
+          new Date(`${year}-${month}-01`),
+          new Date(`${year}-${month}-31`),
+        ),
+        building_id: houseIdx,
       },
     };
     if (charterRent == '월세') {
-      options.where['월세금액'] = Not(Equal(0));
+      options.where['monthly_rent'] = Not(Equal(0));
     } else if (charterRent == '전세') {
-      options.where['월세금액'] = Equal(0);
+      options.where['monthly_rent'] = Equal(0);
     }
-    if (houseType == '아파트')
-      return await this.apartmentRentRepository.find(options);
-    else if (houseType == '오피스텔')
+    if (houseType == '오피스텔')
       return await this.offiRentRepository.find(options);
   }
 
@@ -79,6 +81,7 @@ export class ApartmentsService {
         계약종료월,
         '월세', // 월세 데이터 가져오기
       );
+      console.log(전세데이터, 월세데이터);
 
       // 각각의 데이터를 처리하여 result 객체에 추가
       전세데이터.forEach(() => {
@@ -99,27 +102,27 @@ export class ApartmentsService {
     houseType: string,
     houseIdx: number,
     area: number,
-    months: Array<number>,
+    month: number,
   ) {
     let results = {};
     let areasArray;
     let selectedRepository, selectedTable;
     if (houseType == '아파트') {
     } else if (houseType == '오피스텔') {
-      selectedRepository = this.apartmentRentRepository;
-      selectedTable = 'ApartmentRent';
+      selectedRepository = this.offiRentRepository;
+      selectedTable = 'offi_contract';
     }
     if (!area) {
       const areas = await selectedRepository
         .createQueryBuilder(selectedTable)
-        .select(`TRUNCATE(${selectedTable}.전용면적, 0)`, '전용면적')
+        .select(`TRUNCATE(${selectedTable}.contract_area, 0)`, 'contract_area')
         .distinct(true)
-        .where(`${selectedTable}.ComplexID LIKE :keyword`, {
+        .where(`${selectedTable}.building_id LIKE :keyword`, {
           keyword: `${houseIdx}`,
         })
-        .orderBy('전용면적', 'ASC')
+        .orderBy('contract_area', 'ASC')
         .getRawMany();
-      areasArray = areas.map((areas) => areas.전용면적);
+      areasArray = areas.map((areas) => areas.contract_area);
     } else {
       areasArray = [area];
     }
@@ -128,16 +131,23 @@ export class ApartmentsService {
       const contracts = await selectedRepository
         .createQueryBuilder(selectedTable)
         .select(
-          `CONCAT(RIGHT(${selectedTable}.년, 2), '.', LPAD(${selectedTable}.월, 2, '0'), '.', LPAD(${selectedTable}.일, 2, '0')) AS 날짜,
-            CONCAT(${selectedTable}.보증금액, '/', ${selectedTable}.월세금액) AS 금액, 
-            층`,
+          `DATE_FORMAT(${selectedTable}.contract_date, '%Y.%m.%d') AS 날짜,
+            CONCAT(${selectedTable}.deposit, '/', ${selectedTable}.monthly_rent) AS 금액, 
+            floor AS 층`,
         )
-        .where(`${selectedTable}.ComplexID LIKE :keyword`, {
+        .where(`${selectedTable}.building_id LIKE :keyword`, {
           keyword: `${houseIdx}`,
         })
-        .andWhere(`TRUNCATE(${selectedTable}.전용면적, 0) = :area`, { area })
-        .andWhere(`${selectedTable}.계약종료년 = :year`, { year: 2023 })
-        .andWhere(`${selectedTable}.계약종료월 IN (:...months)`, { months })
+        .andWhere(`TRUNCATE(${selectedTable}.contract_area, 0) = :area`, {
+          area,
+        })
+        .andWhere(
+          `${selectedTable}.contract_end_date BETWEEN :startDate AND :endDate`,
+          {
+            startDate: new Date(`${year}-${month}-01`),
+            endDate: new Date(`${year}-${month}-31`),
+          },
+        )
         .limit(5)
         .getRawMany();
       results[area] = contracts;

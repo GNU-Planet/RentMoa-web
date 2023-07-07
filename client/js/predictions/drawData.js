@@ -49,7 +49,7 @@ const drawHousePredictionData = (
     areaContainer.classList.add('area-box');
     const areaTitle = document.createElement('p');
     areaTitle.classList.add('big-title');
-    areaTitle.textContent = `${Math.floor(area / 3.3)}평`;
+    areaTitle.textContent = `${area}평`;
     areaContainer.appendChild(areaTitle);
     infoContainer.appendChild(areaContainer);
     if (houseAreaData[area].length > 0) {

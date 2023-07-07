@@ -81,7 +81,6 @@ export class ApartmentsService {
         계약종료월,
         '월세', // 월세 데이터 가져오기
       );
-      console.log(전세데이터, 월세데이터);
 
       // 각각의 데이터를 처리하여 result 객체에 추가
       전세데이터.forEach(() => {
@@ -115,7 +114,10 @@ export class ApartmentsService {
     if (!area) {
       const areas = await selectedRepository
         .createQueryBuilder(selectedTable)
-        .select(`TRUNCATE(${selectedTable}.contract_area, 0)`, 'contract_area')
+        .select(
+          `TRUNCATE(${selectedTable}.contract_area/3.3, 0)`,
+          'contract_area',
+        )
         .distinct(true)
         .where(`${selectedTable}.building_id LIKE :keyword`, {
           keyword: `${houseIdx}`,
@@ -138,7 +140,7 @@ export class ApartmentsService {
         .where(`${selectedTable}.building_id LIKE :keyword`, {
           keyword: `${houseIdx}`,
         })
-        .andWhere(`TRUNCATE(${selectedTable}.contract_area, 0) = :area`, {
+        .andWhere(`TRUNCATE(${selectedTable}.contract_area/3.3, 0) = :area`, {
           area,
         })
         .andWhere(

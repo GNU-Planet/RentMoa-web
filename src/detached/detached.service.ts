@@ -1,7 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { DetachedHouseRent } from './entity/detached.entity';
+import { Injectable, Optional } from '@nestjs/common';
+import { DetachedHouseRent } from '../entity/app.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equal, FindManyOptions, Like, Not, Repository } from 'typeorm';
+import {
+  Equal,
+  FindManyOptions,
+  Like,
+  Not,
+  Repository,
+  Between,
+} from 'typeorm';
+const year = 2023;
 
 @Injectable()
 export class DetachedService {
@@ -20,15 +28,17 @@ export class DetachedService {
   ): Promise<any> {
     const options: FindManyOptions = {
       where: {
-        계약종료년: 2023,
-        계약종료월: month,
-        법정동: location === '진주시' ? Not(Like('%리')) : location,
+        dong: location === '진주시' ? Not(Like('%리')) : location,
+        contract_end_date: Between(
+          new Date(`${year}-${month}-01`),
+          new Date(`${year}-${month}-31`),
+        ),
       },
     };
     if (charterRent == '월세') {
-      options.where['월세금액'] = Not(Equal(0));
+      options.where['monthly_rent'] = Not(Equal(0));
     } else if (charterRent == '전세') {
-      options.where['월세금액'] = Equal(0);
+      options.where['monthly_rent'] = Equal(0);
     }
     return await this.detachedHouseRentRepository.find(options);
   }
@@ -55,7 +65,9 @@ export class DetachedService {
         '월세', // 월세 데이터 가져오기
       );
 
-      const 면적별_예측물량_전세 = 전세데이터.map(({ 계약면적 }) => 계약면적);
+      const 면적별_예측물량_전세 = 전세데이터.map(
+        ({ contract_area }) => contract_area,
+      );
       const 면적별_예측물량_전세_구간 = 면적별_예측물량_전세.map((면적) => {
         const binIndex = bins.findIndex((bin) => 면적 < bin);
         return labels[binIndex];
@@ -65,7 +77,9 @@ export class DetachedService {
         result['합계'][label] = (result['합계'][label] || 0) + 1;
       });
 
-      const 면적별_예측물량_월세 = 월세데이터.map(({ 계약면적 }) => 계약면적);
+      const 면적별_예측물량_월세 = 월세데이터.map(
+        ({ contract_area }) => contract_area,
+      );
       const 면적별_예측물량_월세_구간 = 면적별_예측물량_월세.map((면적) => {
         const binIndex = bins.findIndex((bin) => 면적 < bin);
         return labels[binIndex];
@@ -100,9 +114,8 @@ export class DetachedService {
         계약종료월,
         '월세', // 월세 데이터 가져오기
       );
-
       const 건축년도별_예측물량_전세 = 전세데이터
-        .map(({ 건축년도 }) => 건축년도)
+        .map(({ build_year }) => build_year)
         .filter(Boolean);
       const 건축년도별_예측물량_전세_구간 = 건축년도별_예측물량_전세.map(
         (년도) => {
@@ -119,7 +132,7 @@ export class DetachedService {
       });
 
       const 건축년도별_예측물량_월세 = 월세데이터
-        .map(({ 건축년도 }) => 건축년도)
+        .map(({ build_year }) => build_year)
         .filter(Boolean);
       const 건축년도별_예측물량_월세_구간 = 건축년도별_예측물량_월세.map(
         (년도) => {

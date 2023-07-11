@@ -81,7 +81,10 @@ export class RentContract {
 }
 
 @Entity({ name: 'detached_house_contract' })
-export class DetachedHouseRent extends RentContract {}
+export class DetachedHouseRent extends RentContract {
+  @Column()
+  build_year: number; // 건축년도
+}
 
 @Entity({ name: 'apartment_contract' })
 export class ApartmentRent extends RentContract {

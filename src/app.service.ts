@@ -13,6 +13,7 @@ import {
   DetachedHouseRent,
   OffiRent,
   ApartmentRent,
+  RowHouseRent,
 } from './entity/app.entity';
 
 const year = 2023;
@@ -28,12 +29,15 @@ export class AppService {
     private apartmentRentRepository: Repository<ApartmentRent>,
     @InjectRepository(OffiRent)
     private offiRentRepository: Repository<OffiRent>,
+    @InjectRepository(RowHouseRent)
+    private rowHouseRentRepository: Repository<RowHouseRent>,
   ) {
     this.administrativeDivisionInfoRepository =
       administrativeDivisionInfoRepository;
     this.detachedHouseRentRepository = detachedHouseRentRepository;
     this.apartmentRentRepository = apartmentRentRepository;
     this.offiRentRepository = offiRentRepository;
+    this.rowHouseRentRepository = rowHouseRentRepository;
   }
 
   async getDongList(): Promise<any> {
@@ -61,10 +65,14 @@ export class AppService {
     } else if (charterRent == '전세') {
       options.where['monthly_rent'] = Equal(0);
     }
-    if (houseType == '단독다가구')
-      return await this.detachedHouseRentRepository.find(options);
+    if (houseType == '아파트')
+      return await this.apartmentRentRepository.find(options);
     else if (houseType == '오피스텔')
       return await this.offiRentRepository.find(options);
+    else if (houseType == '연립다세대')
+      return await this.rowHouseRentRepository.find(options);
+    else if (houseType == '단독다가구')
+      return await this.detachedHouseRentRepository.find(options);
   }
 
   async getPredictedAmountByDong(

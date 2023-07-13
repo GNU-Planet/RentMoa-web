@@ -7,6 +7,8 @@ import {
   ApartmentRent,
   OffiInfo,
   OffiRent,
+  RowHouseInfo,
+  RowHouseRent,
 } from '../entity/app.entity';
 
 @Module({
@@ -16,6 +18,8 @@ import {
       ApartmentRent,
       OffiRent,
       OffiInfo,
+      RowHouseInfo,
+      RowHouseRent,
     ]),
   ],
   controllers: [ApartmentsController],

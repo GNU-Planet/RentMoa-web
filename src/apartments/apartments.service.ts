@@ -5,6 +5,8 @@ import {
   ApartmentRent,
   OffiRent,
   OffiInfo,
+  RowHouseInfo,
+  RowHouseRent,
 } from '../entity/app.entity';
 import { Between, Equal, FindManyOptions, In, Not, Repository } from 'typeorm';
 
@@ -21,21 +23,27 @@ export class ApartmentsService {
     private readonly offiInfoRepository: Repository<OffiInfo>,
     @InjectRepository(OffiRent)
     private readonly offiRentRepository: Repository<OffiRent>,
+    @InjectRepository(RowHouseInfo)
+    private readonly rowHouseInfoRepository: Repository<RowHouseInfo>,
+    @InjectRepository(RowHouseRent)
+    private readonly rowHouseRentRepository: Repository<RowHouseRent>,
   ) {
     this.apartmentRentRepository = apartmentRentRepository;
     this.apartmentInfoRepository = apartmentInfoRepository;
     this.offiRentRepository = offiRentRepository;
     this.offiInfoRepository = offiInfoRepository;
+    this.rowHouseInfoRepository = rowHouseInfoRepository;
+    this.rowHouseRentRepository = rowHouseRentRepository;
   }
 
   async getApartmentsLocations(houseType: string): Promise<any> {
-    let result;
     if (houseType === '아파트') {
-      result = await this.apartmentInfoRepository.find();
+      return await this.apartmentInfoRepository.find();
     } else if (houseType === '오피스텔') {
-      result = await this.offiInfoRepository.find();
+      return await this.offiInfoRepository.find();
+    } else if (houseType === '연립다세대') {
+      return await this.rowHouseInfoRepository.find();
     }
-    return result;
   }
 
   async getHouseDetailData(
@@ -58,8 +66,13 @@ export class ApartmentsService {
     } else if (charterRent == '전세') {
       options.where['monthly_rent'] = Equal(0);
     }
-    if (houseType == '오피스텔')
+    if (houseType === '아파트') {
+      return await this.apartmentRentRepository.find(options);
+    } else if (houseType === '오피스텔') {
       return await this.offiRentRepository.find(options);
+    } else if (houseType === '연립다세대') {
+      return await this.rowHouseRentRepository.find(options);
+    }
   }
 
   async getPredictedAmountByHouse(
@@ -93,7 +106,6 @@ export class ApartmentsService {
         result.합계 += 1;
       });
     }
-
     return result;
   }
 
@@ -106,10 +118,15 @@ export class ApartmentsService {
     let results = {};
     let areasArray;
     let selectedRepository, selectedTable;
-    if (houseType == '아파트') {
-    } else if (houseType == '오피스텔') {
+    if (houseType === '아파트') {
+      selectedRepository = this.apartmentRentRepository;
+      selectedTable = 'apartment_contract';
+    } else if (houseType === '오피스텔') {
       selectedRepository = this.offiRentRepository;
       selectedTable = 'offi_contract';
+    } else if (houseType === '연립다세대') {
+      selectedRepository = this.rowHouseRentRepository;
+      selectedTable = 'row_house_contract';
     }
     if (!area) {
       const areas = await selectedRepository

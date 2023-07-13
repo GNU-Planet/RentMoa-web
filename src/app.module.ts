@@ -9,6 +9,7 @@ import {
   DetachedHouseRent,
   ApartmentRent,
   OffiRent,
+  RowHouseRent,
 } from './entity/app.entity';
 import { join } from 'path';
 import { ApartmentsModule } from './apartments/apartments.module';
@@ -41,6 +42,7 @@ import { DetachedModule } from './detached/detached.module';
       DetachedHouseRent,
       ApartmentRent,
       OffiRent,
+      RowHouseRent,
     ]),
     ApartmentsModule,
     DetachedModule,

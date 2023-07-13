@@ -7,6 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
+// 법정동 정보 테이블
 @Entity({ name: 'administrative_division_info' })
 export class AdministrativeDivisionInfo {
   @PrimaryGeneratedColumn()
@@ -22,6 +23,7 @@ export class AdministrativeDivisionInfo {
   dong_lng: number; // 법정동 경도
 }
 
+// 공통 정보 테이블
 @Entity({ name: 'rent_info' })
 export class RentInfo {
   @PrimaryGeneratedColumn()
@@ -43,9 +45,15 @@ export class RentInfo {
   building_lng: number; // 건물 경도
 }
 
+// 아파트 정보 테이블
 @Entity({ name: 'apartment_info' })
-export class ApartmentInfo extends RentInfo {}
+export class ApartmentInfo extends RentInfo {
+  // 다른 엔티티와의 관계 설정
+  @OneToMany(() => ApartmentRent, (contract) => contract.building)
+  contracts: ApartmentRent[];
+}
 
+// 오피스텔 정보 테이블
 @Entity({ name: 'offi_info' })
 export class OffiInfo extends RentInfo {
   // 다른 엔티티와의 관계 설정
@@ -53,6 +61,15 @@ export class OffiInfo extends RentInfo {
   contracts: OffiRent[];
 }
 
+// 연립다세대 정보 테이블
+@Entity({ name: 'row_house_info' })
+export class RowHouseInfo extends RentInfo {
+  // 다른 엔티티와의 관계 설정
+  @OneToMany(() => RowHouseRent, (contract) => contract.building)
+  contracts: RowHouseRent[];
+}
+
+// 공통 계약 테이블
 @Entity({ name: 'rent_contract' })
 export class RentContract {
   @PrimaryGeneratedColumn()
@@ -80,18 +97,22 @@ export class RentContract {
   monthly_rent: number; // 월세
 }
 
-@Entity({ name: 'detached_house_contract' })
-export class DetachedHouseRent extends RentContract {
-  @Column()
-  build_year: number; // 건축년도
-}
-
+// 아파트 계약 테이블
 @Entity({ name: 'apartment_contract' })
 export class ApartmentRent extends RentContract {
+  @Column()
+  building_id: number;
+
+  // 외래 키 관계 설정
+  @ManyToOne(() => ApartmentInfo, (info) => info.contracts)
+  @JoinColumn({ name: 'building_id' })
+  building: ApartmentInfo;
+
   @Column()
   floor: number; // 층
 }
 
+// 오피스텔 계약 테이블
 @Entity({ name: 'offi_contract' })
 export class OffiRent extends RentContract {
   @Column()
@@ -104,4 +125,26 @@ export class OffiRent extends RentContract {
 
   @Column()
   floor: number; // 층
+}
+
+// 연립다세대 계약 테이블
+@Entity({ name: 'row_house_contract' })
+export class RowHouseRent extends RentContract {
+  @Column()
+  building_id: number;
+
+  // 외래 키 관계 설정
+  @ManyToOne(() => RowHouseInfo, (info) => info.contracts)
+  @JoinColumn({ name: 'building_id' })
+  building: RowHouseInfo;
+
+  @Column()
+  floor: number; // 층
+}
+
+// 단독다가구 계약 테이블
+@Entity({ name: 'detached_house_contract' })
+export class DetachedHouseRent extends RentContract {
+  @Column()
+  build_year: number; // 건축년도
 }

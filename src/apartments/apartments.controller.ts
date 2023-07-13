@@ -4,7 +4,7 @@ import { ApartmentsService } from './apartments.service';
 @Controller('apartments')
 export class ApartmentsController {
   constructor(private readonly apartmentsService: ApartmentsService) {}
-  // 아파트&오피스텔 위치 데이터 가져오기
+  // 아파트&오피스텔&연립다세대 위치 데이터 가져오기
   @Post('/location')
   async getApartmentsLocations(@Body('houseType') houseType: string) {
     const result = await this.apartmentsService.getApartmentsLocations(
@@ -13,7 +13,7 @@ export class ApartmentsController {
 
     return { result };
   }
-  // 아파트&오피스텔 예측 요약
+  // 아파트&오피스텔&연립다세대 예측 요약
   @Post('/house')
   async getPredictedAmountByHouse(
     @Body('houseType') houseType: string,
@@ -29,7 +29,7 @@ export class ApartmentsController {
     return { result };
   }
 
-  // 아파트&오피스텔 면적별 예측
+  // 아파트&오피스텔&연립다세대 면적별 예측
   @Post('/house-area')
   async getPredictedAmountByHouseArea(
     @Body('houseType') houseType: string,

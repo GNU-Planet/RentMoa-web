@@ -98,7 +98,7 @@ export class RentContract {
 }
 
 // 아파트 계약 테이블
-@Entity({ name: 'apartment_contract' })
+@Entity({ name: 'apartment_rent_contract' })
 export class ApartmentRent extends RentContract {
   @Column()
   building_id: number;
@@ -113,7 +113,7 @@ export class ApartmentRent extends RentContract {
 }
 
 // 오피스텔 계약 테이블
-@Entity({ name: 'offi_contract' })
+@Entity({ name: 'offi_rent_contract' })
 export class OffiRent extends RentContract {
   @Column()
   building_id: number;
@@ -128,7 +128,7 @@ export class OffiRent extends RentContract {
 }
 
 // 연립다세대 계약 테이블
-@Entity({ name: 'row_house_contract' })
+@Entity({ name: 'row_house_rent_contract' })
 export class RowHouseRent extends RentContract {
   @Column()
   building_id: number;

@@ -1,6 +1,6 @@
 import { Controller, Get, Render } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // ConfigService 추가
-import { Body, Param, Post, Query } from '@nestjs/common/decorators';
+import { Body, Post } from '@nestjs/common/decorators';
 import { AppService } from './app.service';
 
 @Controller()
@@ -20,7 +20,7 @@ export class AppController {
   @Render('map')
   async getMap() {
     const result = await this.appService.getPredictedAmountByDong(
-      '오피스텔',
+      '아파트',
       '진주시',
       [7],
     );

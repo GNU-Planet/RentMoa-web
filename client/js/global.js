@@ -2,4 +2,4 @@
 let dongMarkers;
 let houseMarkers;
 let months = [7];
-let houseType = '오피스텔';
+let houseType = '아파트';

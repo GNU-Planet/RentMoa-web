@@ -29,6 +29,23 @@ const drawHousePredictionData = (
   houseNameQuery.innerHTML = houseName;
   houseAddressQuery.innerHTML = houseAddress;
 
+  // 평수 불러오기
+  const sizeFilter = document.querySelector('.size-filter');
+  // 기존 요소 삭제
+  while (sizeFilter.firstChild) {
+    sizeFilter.firstChild.remove();
+  }
+  Object.keys(houseAreaData)
+    .reverse()
+    .forEach((area, index) => {
+      const filterBtn = document.createElement('span');
+      filterBtn.classList.add('filterBtn');
+      // index가 배열의 끝일 경우 selected 클래스 추가
+      if (index == 0) filterBtn.classList.add('selected');
+      filterBtn.innerText = `${area}평`;
+      sizeFilter.appendChild(filterBtn);
+    });
+
   // 공통 전월세 요약 정보창 그리기
   const preInfo = infoContainer.querySelector('.pre-info');
   const preTypes = preInfo.querySelectorAll('.sub-info-box');
@@ -57,7 +74,7 @@ const drawHousePredictionData = (
       table.classList.add('info-table');
       areaContainer.appendChild(table);
 
-      const headers = ['계약일', '가격', '동/층'];
+      const headers = ['계약일', '실거래가', '층수'];
       const tr = document.createElement('tr');
       table.appendChild(tr);
 

@@ -109,6 +109,35 @@ export class ApartmentsService {
     return result;
   }
 
+  async getAreaList(houseType: string, houseIdx: number) {
+    let selectedRepository, selectedTable;
+
+    if (houseType === '아파트') {
+      selectedRepository = this.apartmentRentRepository;
+      selectedTable = 'apartment_contract';
+    } else if (houseType === '오피스텔') {
+      selectedRepository = this.offiRentRepository;
+      selectedTable = 'offi_contract';
+    } else if (houseType === '연립다세대') {
+      selectedRepository = this.rowHouseRentRepository;
+      selectedTable = 'row_house_contract';
+    }
+    const areas = await selectedRepository
+      .createQueryBuilder(selectedTable)
+      .select(
+        `TRUNCATE(${selectedTable}.contract_area/3.3, 0)`,
+        'contract_area',
+      )
+      .distinct(true)
+      .where(`${selectedTable}.building_id LIKE :keyword`, {
+        keyword: `${houseIdx}`,
+      })
+      .orderBy('contract_area', 'ASC')
+      .getRawMany();
+
+    return areas.map((areas) => areas.contract_area);
+  }
+
   async getPredictedAmountByHouseArea(
     houseType: string,
     houseIdx: number,
@@ -129,21 +158,7 @@ export class ApartmentsService {
       selectedTable = 'row_house_contract';
     }
     if (!area) {
-      const areas = await selectedRepository
-        .createQueryBuilder(selectedTable)
-        .select(
-          `TRUNCATE(${selectedTable}.contract_area/3.3, 0)`,
-          'contract_area',
-        )
-        .distinct(true)
-        .where(`${selectedTable}.building_id LIKE :keyword`, {
-          keyword: `${houseIdx}`,
-        })
-        .orderBy('contract_area', 'ASC')
-        .getRawMany();
-      areasArray = areas.map((areas) => areas.contract_area);
-    } else {
-      areasArray = [area];
+      areasArray = await this.getAreaList(houseType, houseIdx);
     }
 
     for (const area of areasArray) {
@@ -167,7 +182,6 @@ export class ApartmentsService {
             endDate: new Date(`${year}-${month}-31`),
           },
         )
-        .limit(5)
         .getRawMany();
       results[area] = contracts;
     }

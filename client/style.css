@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
   background-color: #fff;
   color: #000;
 }
@@ -106,7 +106,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
+  content: '';
   content: none;
 }
 
@@ -182,7 +182,7 @@ table {
 
 .offi-box::before,
 .offi-box::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 0;
   height: 0;
@@ -208,7 +208,8 @@ table {
 .filter-container {
   background-color: white;
   padding: 15px;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03), 1px 1px 1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03),
+    1px 1px 1px rgba(0, 0, 0, 0.03);
   margin-bottom: 10px;
 }
 .filter-container .title {
@@ -238,7 +239,8 @@ table {
   width: 350px;
   background-color: white;
   font-size: 16px;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03), 1px 1px 1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03),
+    1px 1px 1px rgba(0, 0, 0, 0.03);
   overflow: auto;
 }
 .info-container .info-box:first-of-type {

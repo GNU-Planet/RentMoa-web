@@ -45,6 +45,7 @@ const updateHouseTypeMarkers = async (houseType) => {
       marker.setMap(null);
     });
   }
+  if (houseType == '단독다가구') return;
   const apartmentJsonDatas = requestData({ houseType }, '/apartments/location');
   apartmentJsonDatas.then((data) => {
     if (!data) return;

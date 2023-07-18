@@ -166,11 +166,12 @@ export class ApartmentsService {
         .createQueryBuilder(selectedTable)
         .select(
           `DATE_FORMAT(${selectedTable}.contract_date, '%Y.%m.%d') AS 날짜,
+          contract_type AS 계약종류,
           ${
             charterRent === '전세'
               ? `${selectedTable}.deposit`
               : `CONCAT(${selectedTable}.deposit, '/', ${selectedTable}.monthly_rent)`
-          } AS 금액, 
+          } AS 금액,
             floor AS 층`,
         )
         .where(`${selectedTable}.building_id LIKE :keyword`, {

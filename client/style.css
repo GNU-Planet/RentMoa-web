@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   background-color: #fff;
   color: #000;
 }
@@ -106,7 +106,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: '';
+  content: "";
   content: none;
 }
 
@@ -182,7 +182,7 @@ table {
 
 .offi-box::before,
 .offi-box::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0;
   height: 0;
@@ -208,8 +208,7 @@ table {
 .filter-container {
   background-color: white;
   padding: 15px;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03),
-    1px 1px 1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03), 1px 1px 1px rgba(0, 0, 0, 0.03);
   margin-bottom: 10px;
 }
 .filter-container .title {
@@ -239,8 +238,7 @@ table {
   width: 350px;
   background-color: white;
   font-size: 16px;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03),
-    1px 1px 1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075), -1px 1px 1px rgba(0, 0, 0, 0.03), 1px 1px 1px rgba(0, 0, 0, 0.03);
   overflow: auto;
 }
 .info-container .info-box:first-of-type {
@@ -298,24 +296,36 @@ table {
   font-size: 0.9em;
   color: lightgray;
 }
-.info-container .info-table {
+.info-container .info-box .info-table {
   border-collapse: collapse;
   width: 100%;
   font-family: Arial, sans-serif;
   color: #333;
 }
-.info-container .info-table th,
-.info-container .info-table td {
+.info-container .info-box .info-table th,
+.info-container .info-box .info-table td {
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
-.info-container .info-table th {
+.info-container .info-box .info-table th {
   background-color: #f2f2f2;
   font-weight: bold;
 }
-.info-container .info-table tr:hover {
+.info-container .info-box .info-table tr:hover {
   background-color: #f5f5f5;
+}
+.info-container .info-box .info-table td {
+  position: relative;
+}
+.info-container .info-box .info-table td .renewal-contract {
+  position: absolute;
+  left: -25px;
+  top: 7px;
+  font-size: 13px;
+  background-color: #f3f3f3;
+  padding: 3px;
+  border-radius: 10px;
 }
 
 /*# sourceMappingURL=style.css.map */

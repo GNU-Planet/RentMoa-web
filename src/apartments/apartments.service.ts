@@ -37,13 +37,17 @@ export class ApartmentsService {
   }
 
   async getApartmentsLocations(houseType: string): Promise<any> {
+    let repository;
+
     if (houseType === '아파트') {
-      return await this.apartmentInfoRepository.find();
+      repository = this.apartmentInfoRepository;
     } else if (houseType === '오피스텔') {
-      return await this.offiInfoRepository.find();
+      repository = this.offiInfoRepository;
     } else if (houseType === '연립다세대') {
-      return await this.rowHouseInfoRepository.find();
+      repository = this.rowHouseInfoRepository;
     }
+
+    return await repository.find();
   }
 
   async getHouseDetailData(
@@ -61,18 +65,24 @@ export class ApartmentsService {
         building_id: houseIdx,
       },
     };
-    if (charterRent == '월세') {
+
+    if (charterRent === '월세') {
       options.where['monthly_rent'] = Not(Equal(0));
-    } else if (charterRent == '전세') {
+    } else if (charterRent === '전세') {
       options.where['monthly_rent'] = Equal(0);
     }
+
+    let repository;
+
     if (houseType === '아파트') {
-      return await this.apartmentRentRepository.find(options);
+      repository = this.apartmentRentRepository;
     } else if (houseType === '오피스텔') {
-      return await this.offiRentRepository.find(options);
+      repository = this.offiRentRepository;
     } else if (houseType === '연립다세대') {
-      return await this.rowHouseRentRepository.find(options);
+      repository = this.rowHouseRentRepository;
     }
+
+    return await repository.find(options);
   }
 
   async getPredictedAmountByHouse(
@@ -81,31 +91,19 @@ export class ApartmentsService {
     months: Array<number>,
   ) {
     const result = { 합계: 0, 전세: 0, 월세: 0 };
+    ``;
+
     for (const 계약종료월 of months) {
-      const 전세데이터 = await this.getHouseDetailData(
-        houseType,
-        houseIdx,
-        계약종료월,
-        '전세', // 전세 데이터 가져오기
-      );
-      const 월세데이터 = await this.getHouseDetailData(
-        houseType,
-        houseIdx,
-        계약종료월,
-        '월세', // 월세 데이터 가져오기
-      );
+      const [전세데이터, 월세데이터] = await Promise.all([
+        this.getHouseDetailData(houseType, houseIdx, 계약종료월, '전세'),
+        this.getHouseDetailData(houseType, houseIdx, 계약종료월, '월세'),
+      ]);
 
-      // 각각의 데이터를 처리하여 result 객체에 추가
-      전세데이터.forEach(() => {
-        result.전세 += 1;
-        result.합계 += 1;
-      });
-
-      월세데이터.forEach(() => {
-        result.월세 += 1;
-        result.합계 += 1;
-      });
+      result.전세 += 전세데이터.length;
+      result.월세 += 월세데이터.length;
+      result.합계 += 전세데이터.length + 월세데이터.length;
     }
+
     return result;
   }
 
@@ -122,6 +120,7 @@ export class ApartmentsService {
       selectedRepository = this.rowHouseRentRepository;
       selectedTable = 'row_house_contract';
     }
+
     const areas = await selectedRepository
       .createQueryBuilder(selectedTable)
       .select(
@@ -144,9 +143,13 @@ export class ApartmentsService {
     area: number,
     month: number,
   ) {
-    let results = {};
-    let areasArray;
+    const results = {};
+    const areasArray = area
+      ? [area]
+      : await this.getAreaList(houseType, houseIdx);
     let selectedRepository, selectedTable;
+    let charterRent = '전세';
+
     if (houseType === '아파트') {
       selectedRepository = this.apartmentRentRepository;
       selectedTable = 'apartment_contract';
@@ -157,16 +160,17 @@ export class ApartmentsService {
       selectedRepository = this.rowHouseRentRepository;
       selectedTable = 'row_house_contract';
     }
-    if (!area) {
-      areasArray = await this.getAreaList(houseType, houseIdx);
-    }
 
     for (const area of areasArray) {
       const contracts = await selectedRepository
         .createQueryBuilder(selectedTable)
         .select(
           `DATE_FORMAT(${selectedTable}.contract_date, '%Y.%m.%d') AS 날짜,
-            CONCAT(${selectedTable}.deposit, '/', ${selectedTable}.monthly_rent) AS 금액, 
+          ${
+            charterRent === '전세'
+              ? `${selectedTable}.deposit`
+              : `CONCAT(${selectedTable}.deposit, '/', ${selectedTable}.monthly_rent)`
+          } AS 금액, 
             floor AS 층`,
         )
         .where(`${selectedTable}.building_id LIKE :keyword`, {
@@ -174,17 +178,19 @@ export class ApartmentsService {
         })
         .andWhere(`TRUNCATE(${selectedTable}.contract_area/3.3, 0) = :area`, {
           area,
-        })
-        .andWhere(
-          `${selectedTable}.contract_end_date BETWEEN :startDate AND :endDate`,
-          {
-            startDate: new Date(`${year}-${month}-01`),
-            endDate: new Date(`${year}-${month}-31`),
-          },
-        )
-        .getRawMany();
-      results[area] = contracts;
+        });
+
+      if (charterRent === '월세') {
+        contracts.andWhere(`${selectedTable}.monthly_rent != 0`);
+      } else if (charterRent === '전세') {
+        contracts.andWhere(`${selectedTable}.monthly_rent = 0`);
+      }
+
+      contracts.orderBy(`${selectedTable}.contract_date`, 'DESC');
+
+      results[area] = await contracts.getRawMany();
     }
+    console.log(results);
     return results;
   }
 }

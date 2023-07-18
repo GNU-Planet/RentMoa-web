@@ -30,10 +30,10 @@ const drawHousePredictionData = (
   houseAddressQuery.innerHTML = houseAddress;
 
   // 평수 불러오기
-  const sizeFilter = document.querySelector('.size-filter');
+  const areaFilter = document.querySelector('.area-filter');
   // 기존 요소 삭제
-  while (sizeFilter.firstChild) {
-    sizeFilter.firstChild.remove();
+  while (areaFilter.firstChild) {
+    areaFilter.firstChild.remove();
   }
   Object.keys(houseAreaData)
     .reverse()
@@ -43,13 +43,13 @@ const drawHousePredictionData = (
       // index가 배열의 끝일 경우 selected 클래스 추가
       if (index == 0) filterBtn.classList.add('selected');
       filterBtn.innerText = `${area}평`;
-      sizeFilter.appendChild(filterBtn);
+      areaFilter.appendChild(filterBtn);
     });
 
   // 공통 전월세 요약 정보창 그리기
   const preInfo = infoContainer.querySelector('.pre-info');
   const preTypes = preInfo.querySelectorAll('.sub-info-box');
-
+  console.log(houseData);
   preTypes.forEach((count, index) => {
     const text = count.querySelector('.text');
     text.textContent = `${Object.values(houseData)[index]}호`;

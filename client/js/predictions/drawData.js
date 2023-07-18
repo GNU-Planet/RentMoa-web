@@ -49,7 +49,6 @@ const drawHousePredictionData = (
   // 공통 전월세 요약 정보창 그리기
   const preInfo = infoContainer.querySelector('.pre-info');
   const preTypes = preInfo.querySelectorAll('.sub-info-box');
-  console.log(houseData);
   preTypes.forEach((count, index) => {
     const text = count.querySelector('.text');
     text.textContent = `${Object.values(houseData)[index]}호`;
@@ -60,7 +59,10 @@ const drawHousePredictionData = (
   areaContainers.forEach((areaContainer) => {
     areaContainer.remove();
   });
+  const realPriceChart = document.querySelector('#real-price-chart');
   Object.keys(houseAreaData).forEach((area) => {
+    // 가격 차트 그리기
+    drawAverageDepositGraph(houseAreaData[area]);
     const areaContainer = document.createElement('div');
     areaContainer.classList.add('info-box');
     areaContainer.classList.add('area-box');
@@ -84,6 +86,7 @@ const drawHousePredictionData = (
         tr.appendChild(th);
       });
       areaContainer.appendChild(table);
+      realPriceChart.appendChild(areaContainer);
       houseAreaData[area].forEach((contractData) => {
         const tr = document.createElement('tr');
         table.appendChild(tr);

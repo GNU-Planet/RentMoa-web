@@ -12,7 +12,9 @@ div(class='info-container house-container except-content')
         span(class='filterBtn') 전세가율(갭)
       div(class='filterBtns area-filter')
   //- 실거래가 차트
-  div(class='info-box area-box')
+  div(class='info-box' id='real-price-chart')
+    p(class='title') 전체 기간 실거래가
+    <div id="deposit-graph-container" style="width:100%; height:200px;"></div>
   div(class='info-box')
     p(class='title') 예측물량
     div(class='info-col-box pre-info')

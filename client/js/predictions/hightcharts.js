@@ -1,3 +1,58 @@
+// 아파트, 오피스텔, 연립다세대 그래프
+// 전세 그래프
+const drawAverageDepositGraph = (data) => {
+  // 월 별로 데이터를 그룹화하여 평균 값 계산
+  const monthlyData = {};
+  data.forEach((contractData) => {
+    const month = contractData.날짜.split('.').slice(0, 2).join('.');
+    if (!monthlyData[month]) {
+      monthlyData[month] = [];
+    }
+    monthlyData[month].push(contractData.금액);
+  });
+
+  const months = Object.keys(monthlyData);
+  const averageDeposits = months.map((month) => {
+    const deposits = monthlyData[month];
+    const average = Math.floor(
+      deposits.reduce((sum, deposit) => sum + deposit, 0) / deposits.length,
+    );
+    return average;
+  });
+
+  Highcharts.chart('deposit-graph-container', {
+    chart: {
+      type: 'line',
+    },
+    title: {
+      text: '',
+    },
+    xAxis: {
+      categories: months,
+      reversed: true,
+    },
+    yAxis: {
+      title: {
+        text: '',
+      },
+    },
+    plotOptions: {
+      line: {
+        marker: {
+          enabled: false, // 점 숨김
+        },
+      },
+    },
+    series: [
+      {
+        name: '전세금',
+        data: averageDeposits,
+      },
+    ],
+  });
+};
+
+// 단독다가구
 const drawTypeAreaGraph = (data) => {
   Highcharts.chart('type_area-graph-container', {
     title: {

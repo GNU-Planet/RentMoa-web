@@ -190,7 +190,7 @@ export class ApartmentsService {
 
       results[area] = await contracts.getRawMany();
     }
-    console.log(results);
+
     return results;
   }
 }

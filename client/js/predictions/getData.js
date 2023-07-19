@@ -44,7 +44,13 @@ const getHousePredictionData = async (infoWindow) => {
     };
     const houseData = await requestData(body, '/apartments/house');
     const houseAreaData = await requestData(body, '/apartments/house-area');
-    drawHousePredictionData(houseName, houseAddress, houseData, houseAreaData);
+    drawHousePredictionData(
+      houseName,
+      houseAddress,
+      houseData,
+      houseAreaData,
+      months[0],
+    );
   } catch (err) {
     console.log(err);
   }

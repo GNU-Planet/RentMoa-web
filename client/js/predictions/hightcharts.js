@@ -4,11 +4,14 @@ const drawAverageDepositGraph = (data) => {
   // 월 별로 데이터를 그룹화하여 평균 값 계산
   const monthlyData = {};
   data.forEach((contractData) => {
-    const month = contractData.날짜.split('.').slice(0, 2).join('.');
+    const month = contractData.contract_start_date
+      .split('.')
+      .slice(0, 2)
+      .join('.');
     if (!monthlyData[month]) {
       monthlyData[month] = [];
     }
-    monthlyData[month].push(contractData.금액);
+    monthlyData[month].push(contractData.price);
   });
 
   const months = Object.keys(monthlyData);
@@ -47,6 +50,53 @@ const drawAverageDepositGraph = (data) => {
       {
         name: '전세금',
         data: averageDeposits,
+      },
+    ],
+  });
+};
+// 층수 예측 그래프
+const drawFloorGraph = (data) => {
+  // 층수별 호의 수 계산
+  const floorData = {
+    '1-4층': 0,
+    '5-14층': 0,
+    '15-19층': 0,
+    '20층 이상': 0,
+  };
+
+  data.forEach((item) => {
+    const floor = item.floor;
+    if (floor >= 1 && floor <= 4) {
+      floorData['1-4층']++;
+    } else if (floor >= 5 && floor <= 14) {
+      floorData['5-14층']++;
+    } else if (floor >= 15 && floor <= 19) {
+      floorData['15-19층']++;
+    } else if (floor >= 20) {
+      floorData['20층 이상']++;
+    }
+  });
+
+  Highcharts.chart('floor-graph-container', {
+    title: {
+      text: '',
+    },
+    chart: {
+      renderTo: 'container',
+      type: 'bar',
+    },
+    xAxis: {
+      categories: ['1-4층', '5-14층', '15-19층', '20층 이상'],
+    },
+    yAxis: {
+      title: {
+        text: '호',
+      },
+    },
+    series: [
+      {
+        name: '호 수',
+        data: Object.values(floorData),
       },
     ],
   });

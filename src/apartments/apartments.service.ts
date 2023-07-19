@@ -165,14 +165,15 @@ export class ApartmentsService {
       const contracts = await selectedRepository
         .createQueryBuilder(selectedTable)
         .select(
-          `DATE_FORMAT(${selectedTable}.contract_date, '%Y.%m.%d') AS 날짜,
-          contract_type AS 계약종류,
+          `DATE_FORMAT(${selectedTable}.contract_date, '%Y.%m.%d') AS contract_start_date,
+          DATE_FORMAT(${selectedTable}.contract_end_date, '%Y.%m.%d') AS contract_end_date,
+          contract_type,
           ${
             charterRent === '전세'
               ? `${selectedTable}.deposit`
               : `CONCAT(${selectedTable}.deposit, '/', ${selectedTable}.monthly_rent)`
-          } AS 금액,
-            floor AS 층`,
+          } AS price,
+            floor`,
         )
         .where(`${selectedTable}.building_id LIKE :keyword`, {
           keyword: `${houseIdx}`,

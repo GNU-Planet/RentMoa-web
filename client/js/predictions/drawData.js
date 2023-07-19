@@ -8,6 +8,7 @@ const drawHousePredictionData = (
   houseAddress,
   houseData,
   houseAreaData,
+  month,
 ) => {
   const infoContainer = document.querySelector('.house-container');
   const closeBtn = infoContainer.querySelector('.close_btn');
@@ -41,13 +42,7 @@ const drawHousePredictionData = (
       areaFilter.appendChild(filterBtn);
     });
 
-  const preInfo = infoContainer.querySelector('.pre-info');
-  const preTypes = preInfo.querySelectorAll('.sub-info-box');
-  preTypes.forEach((count, index) => {
-    const text = count.querySelector('.text');
-    text.textContent = `${Object.values(houseData)[index]}호`;
-  });
-
+  // 실거래 데이터
   const areaContainers = infoContainer.querySelectorAll('.area-box');
   areaContainers.forEach((areaContainer) => {
     areaContainer.remove();
@@ -65,23 +60,23 @@ const drawHousePredictionData = (
     });
     table.appendChild(tr);
     data.forEach((contractData) => {
-      const { 날짜, 계약종류, 금액, 층 } = contractData;
+      const { contract_start_date, contract_type, price, floor } = contractData;
       const tr = document.createElement('tr');
       const tdDate = document.createElement('td');
       const tdTypePrice = document.createElement('td');
       const spanPrice = document.createElement('span');
       const tdFloor = document.createElement('td');
-      tdDate.textContent = 날짜;
-      spanPrice.textContent = ` ${금액}`;
+      tdDate.textContent = contract_start_date;
+      spanPrice.textContent = ` ${price}`;
       tdTypePrice.appendChild(spanPrice);
-      tdFloor.textContent = 층;
+      tdFloor.textContent = floor;
       tr.appendChild(tdDate);
       tr.appendChild(tdTypePrice);
       tr.appendChild(tdFloor);
 
-      if (계약종류 === '갱신') {
+      if (contract_type === '갱신') {
         const spanType = document.createElement('span');
-        spanType.textContent = 계약종류;
+        spanType.textContent = contract_type;
         spanType.classList.add('renewal-contract');
         tdTypePrice.prepend(spanType);
       }
@@ -127,17 +122,38 @@ const drawHousePredictionData = (
     updateContractTable();
   };
 
+  const drawPredictionCount = (data) => {
+    const preInfo = infoContainer.querySelector('.pre-info');
+    const text = preInfo.querySelector('.text');
+    if (data.length === 0) {
+      text.textContent = '0호';
+    } else {
+      text.textContent = `${data.length}호`;
+    }
+  };
+
   const data = houseAreaData[Object.keys(houseAreaData)[0]];
+  // 계약 종료일이 해당 월인 데이터만 필터링
+  const predictedData = data.filter((item) => {
+    const endDateParts = item.contract_end_date.split('.');
+    const endYear = Number(endDateParts[0]);
+    const endMonth = Number(endDateParts[1]);
+
+    return endYear == year && endMonth == month;
+  });
   drawAverageDepositGraph(data);
+  drawFloorGraph(predictedData, month);
+  drawPredictionCount(predictedData);
   drawMoreContracts();
 };
 
+// TODO: 리팩토링 필요
 const drawDongPredictionData = (dongTitle, builtYearData, typeAreaData) => {
   if (infoContainer) infoContainer.classList.add('except-content');
-  if (houseType == '오피스텔')
-    infoContainer = document.querySelector('.offi-container');
-  else if (houseType == '단독다가구')
+  if (houseType == '단독다가구')
     infoContainer = document.querySelector('.detached-container');
+  else if (houseType == '오피스텔')
+    infoContainer = document.querySelector('.offi-container');
   const closeBtn = infoContainer.querySelector('.close_btn');
   infoContainer.classList.remove('except-content');
   // 기존 사이드 필터박스 삭제

@@ -1,3 +1,5 @@
+year = 2023;
+
 // 지도 전역변수
 let dongMarkers;
 let houseMarkers;

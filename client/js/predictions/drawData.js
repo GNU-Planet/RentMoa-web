@@ -66,7 +66,7 @@ const drawHousePredictionData = (
   });
 
   // 새로운 버튼 생성 및 이벤트 리스너 추가
-  const leaseTypes = ['전세', '월세', '전세가율'];
+  const leaseTypes = ['전세', '월세'];
   leaseTypes.forEach((type) => {
     const btn = document.createElement('span');
     btn.classList.add('filterBtn');
@@ -106,13 +106,14 @@ const drawHousePredictionData = (
         drawAverageDepositGraph(data);
         drawFloorGraph(predictedData, month);
         drawPredictionCount(predictedData);
-        drawMoreContracts();
+        drawMoreContracts(area);
       });
       areaFilter.appendChild(filterBtn);
     });
 
   // 실거래 데이터
   const areaContainers = infoContainer.querySelectorAll('.area-box');
+
   areaContainers.forEach((areaContainer) => {
     areaContainer.remove();
   });
@@ -169,14 +170,13 @@ const drawHousePredictionData = (
     return table;
   };
 
-  const drawMoreContracts = () => {
+  const drawMoreContracts = (area) => {
     if (realPriceChart.querySelector('.area-box'))
       realPriceChart.querySelector('.area-box').remove();
     const areaContainer = document.createElement('div');
     areaContainer.classList.add('area-box');
     realPriceChart.appendChild(areaContainer);
-
-    const currentData = houseAreaData[Object.keys(houseAreaData)[0]];
+    const currentData = houseAreaData[area];
     let visibleContracts = 5;
     const updateContractTable = () => {
       const existingTable = areaContainer.querySelector('.info-table');
@@ -216,9 +216,8 @@ const drawHousePredictionData = (
     }
   };
   const keysArray = Object.keys(houseAreaData);
-  const lastKey = keysArray[keysArray.length - 1];
-  console.log(lastKey);
-  const data = houseAreaData[lastKey];
+  const area = keysArray[keysArray.length - 1];
+  const data = houseAreaData[area];
   // 계약 종료일이 해당 월인 데이터만 필터링
   const predictedData = data.filter((item) => {
     const endDateParts = item.contract_end_date.split('.');
@@ -230,7 +229,7 @@ const drawHousePredictionData = (
   drawAverageDepositGraph(data);
   drawFloorGraph(predictedData, month);
   drawPredictionCount(predictedData);
-  drawMoreContracts();
+  drawMoreContracts(area);
 };
 
 // TODO: 리팩토링 필요

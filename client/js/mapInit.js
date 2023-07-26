@@ -16,17 +16,21 @@ const updateDongMarkers = (dongMarkers, result) => {
 };
 
 const handleClick = async function () {
-  await getDetachedHousePredictionData(this);
+  if (houseType === '단독다가구') await getDetachedHousePredictionData(this);
   const lat = Number(this.dataset.lat);
   const lng = Number(this.dataset.lng);
   map.panTo(new kakao.maps.LatLng(lat, lng));
+  if (houseType !== '단독다가구') {
+    setTimeout(() => {
+      map.setLevel(4);
+    }, 500);
+  }
   drawNoCount();
 };
 
 const addDongBtnClickEventListener = () => {
   const dongBtns = document.querySelectorAll('.dong-box');
   dongBtns.forEach((btn) => {
-    btn.removeEventListener('click', handleClick);
     btn.addEventListener('click', handleClick);
   });
 };

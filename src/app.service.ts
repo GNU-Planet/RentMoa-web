@@ -65,9 +65,9 @@ export class AppService {
     } else if (charterRent == '전세') {
       options.where['monthly_rent'] = Equal(0);
     }
-    if (houseType == '아파트')
+    if (houseType == '아파트') {
       return await this.apartmentRentRepository.find(options);
-    else if (houseType == '오피스텔')
+    } else if (houseType == '오피스텔')
       return await this.offiRentRepository.find(options);
     else if (houseType == '연립다세대')
       return await this.rowHouseRentRepository.find(options);

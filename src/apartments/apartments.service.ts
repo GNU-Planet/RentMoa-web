@@ -142,13 +142,13 @@ export class ApartmentsService {
     houseIdx: number,
     area: number,
     month: number,
+    charterRent: string,
   ) {
     const results = {};
     const areasArray = area
       ? [area]
       : await this.getAreaList(houseType, houseIdx);
     let selectedRepository, selectedTable;
-    let charterRent = '전세';
 
     if (houseType === '아파트') {
       selectedRepository = this.apartmentRentRepository;

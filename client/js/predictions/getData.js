@@ -23,9 +23,11 @@ const getHousePredictionData = async (infoWindow) => {
   const tempElement = document.createElement('div');
   tempElement.innerHTML = infoWindow;
 
-  const houseIdx = tempElement
-    .querySelector('.house-info-window_name')
-    .getAttribute('house-id');
+  houseIdx = Number(
+    tempElement
+      .querySelector('.house-info-window_name')
+      .getAttribute('house-id'),
+  );
 
   const houseName = tempElement.querySelector(
     '.house-info-window_name',
@@ -41,16 +43,10 @@ const getHousePredictionData = async (infoWindow) => {
       houseType,
       houseIdx,
       months,
+      charterRent: leaseType,
     };
-    const houseData = await requestData(body, '/apartments/house');
     const houseAreaData = await requestData(body, '/apartments/house-area');
-    drawHousePredictionData(
-      houseName,
-      houseAddress,
-      houseData,
-      houseAreaData,
-      months[0],
-    );
+    drawHousePredictionData(houseName, houseAddress, houseAreaData, months[0]);
   } catch (err) {
     console.log(err);
   }

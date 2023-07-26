@@ -4,21 +4,26 @@ const drawAverageDepositGraph = (data) => {
   // 월 별로 데이터를 그룹화하여 평균 값 계산
   const monthlyData = {};
   data.forEach((contractData) => {
-    const month = contractData.contract_start_date
-      .split('.')
-      .slice(0, 2)
-      .join('.');
+    const { contract_start_date, price } = contractData;
+    const month = contract_start_date.split('.').slice(0, 2).join('.');
     if (!monthlyData[month]) {
       monthlyData[month] = [];
     }
-    monthlyData[month].push(contractData.price);
+    const convertedPrice =
+      leaseType === '전세'
+        ? price
+        : Math.round(
+            Number(price.split('/')[1]) + Number(price.split('/')[0]) / 300,
+          );
+
+    monthlyData[month].push(convertedPrice);
   });
 
   const months = Object.keys(monthlyData);
-  const averageDeposits = months.map((month) => {
-    const deposits = monthlyData[month];
+  const averagePrices = months.map((month) => {
+    const prices = monthlyData[month];
     const average = Math.floor(
-      deposits.reduce((sum, deposit) => sum + deposit, 0) / deposits.length,
+      prices.reduce((sum, price) => sum + price, 0) / prices.length,
     );
     return average;
   });
@@ -48,8 +53,8 @@ const drawAverageDepositGraph = (data) => {
     },
     series: [
       {
-        name: '전세금',
-        data: averageDeposits,
+        name: '가격',
+        data: averagePrices,
       },
     ],
   });

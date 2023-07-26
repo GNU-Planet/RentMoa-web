@@ -143,7 +143,7 @@ export class RowHouseRent extends RentContract {
 }
 
 // 단독다가구 계약 테이블
-@Entity({ name: 'detached_house_contract' })
+@Entity({ name: 'detached_house_rent_contract' })
 export class DetachedHouseRent extends RentContract {
   @Column()
   build_year: number; // 건축년도
